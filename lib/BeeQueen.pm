@@ -30,7 +30,7 @@ sub determine_banners_for_impression {
 
     $query = { _id => { '$in' => $target->{ banners } } };
     my @banners = $banners->find( $query )->all;
-    info length( @banners ) . ' banners found for impression';
+    info scalar @banners  . ' banners found for impression';
     \@banners;
 };
 
