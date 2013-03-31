@@ -1,1 +1,4 @@
 BeeQueen.komodoproject
+/.komodotools
+.includepath
+.project
