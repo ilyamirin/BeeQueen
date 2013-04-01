@@ -5,6 +5,15 @@ use PPI;
 use HTML::Perlinfo::Modules;
 use Cwd ( 'abs_path', 'getcwd' );
 
+=header3
+This tiny script finds and prints list of midules used by applicaton
+it recusivley finds scripts in bin and lib folders
+
+usage:
+cd misc
+perl ./get_internal_modules_dependancies.pl
+=cut
+
 sub get_name_by_key($) {
 	my $str = shift;
 	$str =~ s!/!::!g;
