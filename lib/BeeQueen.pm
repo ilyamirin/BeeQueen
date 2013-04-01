@@ -4,7 +4,8 @@ package BeeQueen;
 use Mojo::Base 'Mojolicious';
 use Mojolicious::Plugin::Mongodb;
 
-use Cwd ( 'abs_path', 'getcwd' );
+use File::Basename;
+my $dirname = dirname(__FILE__);
 
 =head3 
 This class is the entry point to CAP provider 
@@ -17,10 +18,11 @@ Initialyse application
   sub startup {
 	my $self = shift;
 	
-	my $current_working_directory = getcwd();
-	my $config = $self->plugin->register(Mojolicious->new, 
+	my $current_working_directory  = dirname(__FILE__);
+
+	my $config = $self->plugin('Config', 
 		{
-			file => $current_working_directory . "/../conf"
+			file => $current_working_directory . "/../conf/bee_queen.conf"
 		});
 	
 	$self->plugin(
