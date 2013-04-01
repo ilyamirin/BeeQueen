@@ -4,11 +4,18 @@ BeeQueen
 =head2 SYNOPSIS
 Cloud advertisement processor (CAP).
 
-This module intends for advertising message processing, which are sent to us by CS (client service). CS might be a site, sites or a mobile application. Processing means next 3 functions:
+This module intends for advertising message processing, which are sent to us by CS (client service). 
+CS might be a site, sites or a mobile application. Processing means next 3 functions:
+
+=over 5
 
 =item * Registration of advertising messages in a DB;
+
 =item * Returning proper (set by a client) response on demand;
+
 =item * That`s all.
+
+=back
 
 =head2 Registration of advertising messages in the DB.
 
@@ -16,24 +23,44 @@ When CAP accepts one of three kinds of requests, it immediate puts it with all i
 
 There are 3 types of requests:
 
+=over 5
+
 =item * *Impression*: a user service has just requested us to show an ad banner, consists of 2 parameters: user_id, target_id;
+
 =item * *Click* request: a user has just clicked to a banner in CS and his browser has sent request to CAP, consists of 3 parameters: user_id, target_id and banner_id;
+
 =item * *Endpoint* request: a user has just do some event, in which an owner of CS is interested in (a user buy anything for example), consists of 2 parameters: user_id and event_type.
 
+=back
+
 =head3 Something about parameters:
+
+=over 5
+
 =item * *user_id* allows us to identify user, for who CS wants show ad banner. *user_id* is produced by CS
 service as 32 byte array of symbols.
+
 =item * *target_id* identifies target, which represents advertising place in application or site itself, it is 32 byte array of symbols also;
+
 =item * *banner_id* identifies advertising banner, not just a picture, but picture with all configurations, 32 byte array of symbols;
+
 =item * *event_type* is just a message intended to identify type of an endpoint action for our client, it might be a 255 bytes string.
+
+=back
 
 =head2 Returning proper (predicted by client) response on demand.
 
 We must obviously return something for client requests. Generally CAP uses HTTP Response Statuses to transport information into response;
 
+=over 5
+
 =item * After *impression* requests CAP returns URL to static (banner image);
+
 =item * After *click* request CAP redirects a user to target URL (web page probably);
+
 =item * After *endpoint* request CAP returns empty message.
+
+=back
 
 If response has body information, this information is formatted as JSON Object. Because we might add any new parameters to response in future.
 
@@ -45,7 +72,7 @@ http://pornstarsgals.com/new/client/buy/smthg?userid=%USER_ID%
 
 It may be useful for client to react for events, for example to pay poker chips to user who install application from poker with a help of CAP.
 
-==head3 Impression strategy
+=head3 Impression strategy
 
 When CAP is processing impression request, it must determine, which banner will be showed to user.
 
@@ -53,29 +80,30 @@ Generally CAP uses [Fitness_proportionate_selection](http://en.wikipedia.org/wik
 
 User have to create a target, banners and tune, which banners impress in the target and how often in persentes.
 
-==head3 Objects
+=head3 Objects
 
 It is not objects in OOP meaning, but object in real life.
 
-> user:
->  email: ilaymirin@pornstarsgals.com
->  name: ilaymirin
->  targets:
->  - id: 23gfh3j9hf3xm8fm38yxgfm38xmbf3c
->    name: Big banner with girls
->    banners:
->      - id: ds3fh93r9f3rjf3r9f39rn93rnwcwdcw
->        name: boobs1
->        prob: 0.7
->        target_url: http://pornstarsgals.com/big/boobs/3439849w2384
->      - id: 3nvu3nviejnfvijefnviefmvjefvkevj
->        name: boobs2
->        prob: 0.3
->        target_url: http://pornstarsgals.com/big/booties/245243423423
->    endpoints: 
->      - name: user_buy_somthg
->        callback: http://pornstarsgals.com/new/client/buy/smthg?userid=%USER_ID%
->      - name: user_watch_big_photo
+ user:
+  email: ilaymirin@pornstarsgals.com
+  name: ilaymirin
+  targets:
+  - id: 23gfh3j9hf3xm8fm38yxgfm38xmbf3c
+    name: Big banner with girls
+    banners:
+      - id: ds3fh93r9f3rjf3r9f39rn93rnwcwdcw
+        name: boobs1
+        prob: 0.7
+        target_url: http://pornstarsgals.com/big/boobs/3439849w2384
+      - id: 3nvu3nviejnfvijefnviefmvjefvkevj
+        name: boobs2
+        prob: 0.3
+        target_url: http://pornstarsgals.com/big/booties/245243423423
+    endpoints: 
+      - name: user_buy_somthg
+        callback: http://pornstarsgals.com/new/client/buy/smthg?userid=%USER_ID%
+      - name: user_watch_big_photo
+
 
 =head3 Interface
 
@@ -83,23 +111,25 @@ CAP believes in [REST](http://www.restapitutorial.com/lessons/whatisrest.html)
 
 For example, a typical click processing call: 
 
-> POST http://tripping-ninja.com/v2/click
-> user_id=23gfh3j9hf3xm8fm38yxgfm38xmbf3c
-> target_id=23gfh3j9hf3xm8fm38yxgfm38xmbf3c
-> banner_id=23gfh3j9hf3xm8fm38yxgfm38xmbf3c`
+ POST http://tripping-ninja.com/v2/click
+ user_id=23gfh3j9hf3xm8fm38yxgfm38xmbf3c
+ target_id=23gfh3j9hf3xm8fm38yxgfm38xmbf3c
+ banner_id=23gfh3j9hf3xm8fm38yxgfm38xmbf3c`
+
 
 Get the whole information about banner, throw target:
 
+
 GET http://tripping-ninja.com/v2/banner/23gfh3j9hf3xm8fm38yxgfm38xmbf3c/target/23gfh3j9hf3xm8fm38yxgfm38xmbf3c
-> [ 
->  {
->    id: "dvsvsbsbdbdb", 
->    banner_id: "23gfh3j9hf3xm8fm38yxgfm38xmbf3c",
->    target_id: "svsvsvscvdfewfwefwfwfwfwfwdvbev",
->    user_id: "wvwinviwjnvwdnmvwodmckmwdocmcwo",
->    created_at: "2013-01-01 01:11:75"
->  },  etc...
-> ]
+ [ 
+  {
+    id: "dvsvsbsbdbdb", 
+    banner_id: "23gfh3j9hf3xm8fm38yxgfm38xmbf3c",
+    target_id: "svsvsvscvdfewfwefwfwfwfwfwdvbev",
+    user_id: "wvwinviwjnvwdnmvwodmckmwdocmcwo",
+    created_at: "2013-01-01 01:11:75"
+  },  etc...
+ ]
 
 =cut
 
