@@ -1,75 +1,42 @@
 package BeeQueen;
-use Dancer ':syntax';
-use MongoDB;
-use DateTime;
-use String::Random;
-use Data::Dumper;
 
-our $VERSION = '0.1';
+#use lib 'lib'
+use Mojo::Base 'Mojolicious';
+use Mojolicious::Plugin::Mongodb;
 
-our $random = String::Random->new;
+use File::Basename;
+my $dirname = dirname(__FILE__);
 
-our $client = MongoDB::MongoClient->new( host => 'localhost', port => 27017 );
-our $database = $client->get_database( 'beequeen' );
+=head3 
+This class is the entry point to CAP provider 
+=cut
 
-our $impressions = $database->get_collection( 'impressions' );
-our $clicks = $database->get_collection( 'clicks' );
-our $events = $database->get_collection( 'events' );
+=head3 
+Initialyse application 
+=cut 
+  
+  sub startup {
+	my $self = shift;
+	
+	my $current_working_directory  = dirname(__FILE__);
 
-our $targets = $database->get_collection( 'targets' );
-our $banners = $database->get_collection( 'banners' );
+	my $config = $self->plugin('Config', 
+		{
+			file => $current_working_directory . "/../conf/bee_queen.conf"
+		});
+	
+	$self->plugin(
+		'mongodb',
+		{
+			host   => $config->{'host'},
+			port   => $config->{'port'},
+			helper => 'mongo',
+		}
+	);
+	
+	
+}
 
-sub determine_banners_for_impression {
-    my $impression = shift;
 
-    my $query = { _id => MongoDB::OID->new(value => $impression->{ targetid }) };
-    my $target = $targets->find( $query )->next;
-   
-    #TODO:: show one user no more times than?
-    #TODO:: roulette them?
 
-    $query = { _id => { '$in' => $target->{ banners } } };
-    my @banners = $banners->find( $query )->all;
-    info scalar @banners  . ' banners found for impression';
-    \@banners;
-};
-
-sub get_url_for_banner_with_id {
-    my $banner = $banners->findOne({ 
-            _id => MongoDB::OID->new(value => shift) 
-    });
-    return $banner->{ url };
-};
-
-get '/' => sub {
-    { name => 'Cloud Advertisement Processor', now => DateTime->now->datetime() };
-};
-
-any [ 'get', 'post' ] => '/impression' => sub {
-    my $impr = {};
-    $impr->{ $_ } = params->{ $_ } for qw{ userid targetid  };
-    $impr->{ recieved_at } = DateTime->now; 
-    $impr->{ banners } = determine_banners_for_impression( $impr );
-    $impressions->insert( $impr );
-    #let client see the banners URLs list
-    return [ map { $_->{ url } } @{ $impr->{ banners } } ];
-};
-
-any [ 'get', 'post' ] => '/click' => sub {
-    my $click = {};
-    $click->{ $_ } = params->{ $_ } for qw{ userid targetid bannerid };
-    $click->{ recieved_at } = DateTime->now; 
-    $click->{ redirected_to } = get_url_for_banner_with_id( $click->{ bannerid } ); 
-    $clicks->insert( $click );
-    redirect $click->{ redirected_to };
-};
-
-any [ 'get', 'post' ] => '/event' => sub {
-    my $event = {};
-    $event->{ $_ } = params->{ $_ } for qw{ userid type };
-    $event->{ recieved_at } = DateTime->now; 
-    $events->insert( $event );
-    return;
-};
-
-true;
+1;
