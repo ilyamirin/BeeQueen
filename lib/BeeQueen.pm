@@ -28,8 +28,9 @@ Initialyse application
 	$self->plugin(
 		'mongodb',
 		{
-			host   => $config->{'host'},
-			port   => $config->{'port'},
+			'host'   => $config->{'host'},
+			'port'   => $config->{'port'},
+			'database' => $config->{'database'},
 			helper => 'mongo',
 		}
 	);
