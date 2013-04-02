@@ -17,6 +17,7 @@ sub show_impression(){
     my $tartget_id = $self->param('target_id') || '';
     my $user_id = $self->param('user_id') || '';
     
+    $self->mongo->get_collection('impressions')->insert({'bar'=>'baz'});
 }
 
 1;
