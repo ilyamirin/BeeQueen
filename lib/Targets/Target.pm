@@ -22,8 +22,15 @@ has 'id' => (
 
 has 'name' => (
 	is => 'ro',
-)
+);
 
-has 'bannersIds' => (
+has 'banners_ids' => (
 	is => 'ro'
-)
+);
+
+
+has 'banners_strategy' => (
+	is => 'ro'
+);
+
+1;
