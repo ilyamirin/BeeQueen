@@ -11,12 +11,13 @@ This class will provide access to targets
 
 =cut
 
-has 'connection' => (is => 'ro',);
+has 'database' => (is => 'ro',);
 
 our $TARGETS_COLLECTION_NAME = 'targets';
 
 sub getTargetById(){
 	my ($self, $id) = @_;
 	
-	$self->connection
+	$self->database->get_collection($TARGETS_COLLECTION_NAME);
+	
 }
