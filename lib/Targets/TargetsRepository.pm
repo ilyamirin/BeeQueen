@@ -13,11 +13,28 @@ This class will provide access to targets
 
 has 'database' => (is => 'ro',);
 
+has 'target_builder' => (is => 'ro');
+
 our $TARGETS_COLLECTION_NAME = 'targets';
 
 sub getTargetById(){
 	my ($self, $id) = @_;
 	
-	$self->database->get_collection($TARGETS_COLLECTION_NAME);
+	my $targets_collection = $self->database->get_collection($TARGETS_COLLECTION_NAME);
+	my $target_cursor = $targets_collection->find({'target_id' => $id});
+	my $target = 0;
+	if($target_cursor->count > 0){
+		my $doc = $target_cursor->next;
+		$target = $self->target_builder->clear_builder()
+					->set_id($doc->{'id'})
+					->set_name($doc->{'name'})
+					->set_banners_ids($doc->{'banners_ids'})
+					->set_banners_strategy($doc->{'banners_strategy'})
+					;
+		
+	}
 	
+	return $target;
 }
+
+1;
