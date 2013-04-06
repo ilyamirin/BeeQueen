@@ -5,9 +5,17 @@ use warnings;
 
 use Moo;
 
+=pod
+=head1 Impressions::Impression
+A class to deal with impressins. Depending on input data and user defined banners 
+strategies this class picks banner for given target, and saves information about it
+in database.
+=cut
 
+ #database handler
  has 'database' => (is => 'ro',);
- has 'banners_strategies_hash' => (is => 'ro');
+ #banners_strategies hash reference {'banner_strategy_name' => $banners_strategy}
+ has 'banners_strategies' => (is => 'ro');
  
  our $TARGET_COLLECTION_NAME = 'targets';
  our $BANNERS_COLLECTION_NAME = 'banners';
@@ -22,19 +30,25 @@ use Moo;
 # Throws     : no exceptions
 # Comments   : ???
 # See Also   : n/a
- sub get_banner(){
+ sub get_banner_url(){
  	my ($self, $target_id, $user_id) = @_;
  	
  	my $targets_collection = $self->database->get_collection( $TARGET_COLLECTION_NAME );#obtain targets collection
  	my $target_cursor = $targets_collection->find({'target_id' => $target_id});
  	
+ 	my $url = '';
 	if($target_cursor->count > 0){#if we have something in our output, take the doc
 		my $target = $target_cursor->next;
 		#get target banners list
-		
+		my @banners_list = $self->__get_banners_list($target);
     	my $banner_pick_strategy = $target->{'banner_strategy'};
+    	my $banner = $self->__pick_right_banner(\@banners_list, $banner_pick_strategy, $user_id);
+    	if(defined $banner && $banner){
+    		$url = $banner->{'url'};
+    	}
 	}
  	
+ 	return $url;
  }
 
 ############################################
@@ -55,7 +69,7 @@ use Moo;
  }
  
 ############################################
-# Usage      : $banner = __pick_right_banner(\@banners, 'rundom_one', 'some_user_id');
+# Usage      : $banner = __pick_right_banner(\@banners, 'random_one_strategy', 'some_user_id');
 # Purpose    : get bunner depending on banners strategy and factors for that strategy
 # Returns    : banners list
 # Parameters : target - hash that contains element with key 'banners' 
@@ -67,6 +81,17 @@ use Moo;
  	my ($self, $banners_list_ref, $banners_strategy_name,$user_id) = @_;
  	
  	
+ 	my $banner = 0;
+ 	if(exists( $self->banners_strategies->{$banners_strategy_name} )){
+ 		my $banners_strategy = $self->banners_strategies->{$banners_strategy_name};
+ 		$banner = $banners_strategy->get_banner($banners_list_ref, $user_id);
+ 	}else{
+ 		if(@{$banners_list_ref} > 0){
+ 			$banner = @{$banners_list_ref}[0];
+ 		}
+ 	}
+ 	
+ 	return $banner;
  }
  
  
