@@ -7,6 +7,8 @@ use Moo;
 
 =pod
 =head1 Targets::TargetsRepositiry
+NOTE !!!  For now this this module os obsolete, may be in future we will return
+to this model
 This class will provide access to targets
 
 =cut
@@ -17,7 +19,7 @@ has 'target_builder' => (is => 'ro');
 
 our $TARGETS_COLLECTION_NAME = 'targets';
 
-sub getTargetById(){
+sub get_target_by_id(){
 	my ($self, $id) = @_;
 	
 	my $targets_collection = $self->database->get_collection($TARGETS_COLLECTION_NAME);

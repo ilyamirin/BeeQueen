@@ -21,5 +21,5 @@ my $target_repoditory = Targets::TargetsRepository->new({
 });
 
 
-my $target = $target_repoditory->getTargetById(1);
+my $target = $target_repoditory->get_target_by_id(1);
 ok($target == 0, 'Find nothing it is okey');
