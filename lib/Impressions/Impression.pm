@@ -56,14 +56,17 @@ use Moo;
  
 ############################################
 # Usage      : $banner = __pick_right_banner(\@banners, 'rundom_one', 'some_user_id');
-# Purpose    : get bunner list for given target
+# Purpose    : get bunner depending on banners strategy and factors for that strategy
 # Returns    : banners list
 # Parameters : target - hash that contains element with key 'banners' 
 # Throws     : no exceptions
-# Comments   : ???
-# See Also   : get_banner function
+# Comments   : if no strategy would be presented I think it would be safe enough to pick first one
+#				banner and return in
+# See Also   : n/a
  sub __pick_right_banner(){
  	my ($self, $banners_list_ref, $banners_strategy_name,$user_id) = @_;
+ 	
+ 	
  }
  
  
