@@ -10,6 +10,14 @@ use MongoDB::OID;
  #database handler
  has 'database' => (is => 'ro',);
  
+############################################
+# Usage      : $test_utils->clear_colelctions()
+# Purpose    : This funciton drops collections for targets and banners
+# Returns    : none
+# Parameters : none 
+# Throws     : no exceptions
+# Comments   : ???
+# See Also   : n/a
  sub clear_collections(){
  	my ($self) = @_;
  	my $targets_collection = $self->database->get_collection('targets');
@@ -18,14 +26,32 @@ use MongoDB::OID;
  	$banners_collection->drop();
  }
  
+############################################
+# Usage      : $test_utils->create_target($target_id, $target_name)
+# Purpose    : Crates target in mongo db with given id and name
+# Returns    : target OID
+# Parameters : target id - id of target as a sting, target name - label of this target 
+# Throws     : no exceptions
+# Comments   : ???
+# See Also   : n/a
  sub create_target(){
  	my ($self, $target_id, $target_name) = @_;
  	my $targets_collection = $self->database->get_collection('targets');
  	my $target_oid = $targets_collection
- 						->insert({ 'target_id' => $target_id, 'target_name' => $target_name });
+ 						->save({ 'target_id' => $target_id, 'target_name' => $target_name });
  	return $target_oid;
  }
 
+############################################
+# Usage      : $test_utils->create_banner($target_id, $banner_url, $banner_prob)
+# Purpose    : Creates banner in database and adds it to a given target
+# Returns    : banner OID
+# Parameters : target id - id of target as a sting, 
+#               banner url - label of this target
+#               probability of given banner - number 
+# Throws     : no exceptions
+# Comments   : ???
+# See Also   : n/a
 sub create_banner(){
 	my ($self, $target_id, $banner_url, $banner_prob) = @_;
  	my $banners_collection = $self->database->get_collection('banners');
