@@ -19,7 +19,7 @@ use MongoDB::OID;
  }
 
 sub create_banner(){
-	my ($self, $target_id, $bnanner_url, $banner_prob) = @_;
+	my ($self, $target_id, $banner_url, $banner_prob) = @_;
  	my $banners_collection = $self->database->get_collection('banners');
  	my $banner_oid = $banners_collection
  					->insert({ 'url' => $banner_url, 'prob' => $banner_prob });
@@ -27,6 +27,7 @@ sub create_banner(){
  	my $targets_collection = $self->database->get_collection('targets');
  	$targets_collection->update({'tartget_id' => $target_id}, 
  								{'$push' => {'banners' => $banner_oid}});
+ 	return $banner_oid;
 }
 
 1;
