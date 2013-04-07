@@ -16,6 +16,7 @@ my $test_database = $mongo->get_database('test');
 #==================PREPARE DATA====================
 my $test_utils = TestUtils::TestUtilsMongo->new({'database' => $test_database});
 
+$test_utils->clear_collections();#clear dataset before testing
 my $target_id = 'target_id_1';
 my $target_name = 'target name simple';
 my $target_oid = $test_utils->create_target($target_id, $target_name);
@@ -26,8 +27,11 @@ my $banner_oid = $test_utils->create_banner($target_id, $banner_url, $banner_pro
 #==================RUN TEST========================
 my $impression_obj = Impressions::Impression->new({
 					'database' => $test_database,
+					'banners_strategies' => {},
 				}); 
 my $returned_url = $impression_obj->get_banner_url($target_id);
 
 
-ok($returned_url == $banner_url, 'Find nothing it is okey');
+ok($returned_url eq $banner_url, 'Find nothing it is okey');
+
+$test_utils->clear_collections();#clear dataset after testing
