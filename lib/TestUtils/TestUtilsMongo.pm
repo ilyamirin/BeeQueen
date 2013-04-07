@@ -25,7 +25,7 @@ sub create_banner(){
  					->insert({ 'url' => $banner_url, 'prob' => $banner_prob });
  	
  	my $targets_collection = $self->database->get_collection('targets');
- 	$targets_collection->update({'tartget_id' => $target_id}, 
+ 	$targets_collection->update({'target_id' => $target_id}, 
  								{'$push' => {'banners' => $banner_oid}});
  	return $banner_oid;
 }
