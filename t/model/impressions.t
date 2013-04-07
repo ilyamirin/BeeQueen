@@ -10,6 +10,7 @@ use MongoDB::MongoClient;
 use MongoDB::OID;
 use TestUtils::TestUtilsMongo;
 use Impressions::BannersStrategies::RandomStrategy;
+use Impressions::BannersStrategies::PickSecondStrategy;
 
 my $mongo = MongoDB::MongoClient->new;
 my $test_database = $mongo->get_database('test');
@@ -73,12 +74,12 @@ sub test_with_pick_second_strategy_and_many_banners(){
                     },
                 }); 
     my $returned_url = $impression_obj->get_banner_url($target_id2); 
-    ok($returned_url eq $banner_url2, 'Pick random banner with random strategy');
+    ok($returned_url eq $banner_url2, 'Pick second banner banner with pick_second_banner strategy');
 }
 
 #==================RUN TEST========================
 test_without_strategies();
 test_with_random_strategy();
-test_with_random_strategy_and_many_banners();
+test_with_pick_second_strategy_and_many_banners();
 
 $test_utils->clear_collections();#clear dataset after testing
