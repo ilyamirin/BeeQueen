@@ -87,7 +87,7 @@ in database.
  	if(defined($banners_strategy_name) && 
  	   exists( $self->banners_strategies->{$banners_strategy_name} )){
  		my $banners_strategy = $self->banners_strategies->{$banners_strategy_name};
- 		$banner = $banners_strategy->get_banner($banners_list_ref, $user_id);
+ 		$banner = $banners_strategy->pick_banner($banners_list_ref, $user_id);
  	}else{
  		if(@{$banners_list_ref} > 0){
  			$banner = @{$banners_list_ref}[0];
