@@ -84,7 +84,8 @@ in database.
  	
  	
  	my $banner = 0;
- 	if(exists( $self->banners_strategies->{$banners_strategy_name} )){
+ 	if(defined($banners_strategy_name) && 
+ 	   exists( $self->banners_strategies->{$banners_strategy_name} )){
  		my $banners_strategy = $self->banners_strategies->{$banners_strategy_name};
  		$banner = $banners_strategy->get_banner($banners_list_ref, $user_id);
  	}else{
