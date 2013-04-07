@@ -1,4 +1,4 @@
-use Test::Simple tests=> 2;
+use Test::Simple tests=> 3;
 use warnings;
 use strict;
 
@@ -32,12 +32,21 @@ my $banner_oid = $test_utils->create_banner($target_id, $banner_url, $banner_pro
 my $target_id2 = 'target od 2';
 my $target_name2 = 'target_name 2';
 
-my $target_oid2 = $test_utils->create_target($target_id2, $target_name);
+my $target_oid2 = $test_utils->create_target($target_id2, $target_name2);
 $test_utils->set_target_banner_strategy($target_id2, $pick_second_strategy_name);
 
 $banner_oid = $test_utils->create_banner($target_id2, $banner_url, $banner_prob);
 my $banner_url2 = 'new url';
 my $banner_oid2 = $test_utils->create_banner($target_id2, $banner_url2, $banner_prob);
+
+#===Data for test with one banner and pick second banner strategy===
+my $target_id3 = 'target od 3';
+my $target_name3 = 'target_name 3';
+
+my $target_oid3 = $test_utils->create_target($target_id3, $target_name3);
+$test_utils->set_target_banner_strategy($target_id3, $pick_second_strategy_name);
+
+$banner_oid2 = $test_utils->create_banner($target_id3, $banner_url, $banner_prob);
 
 #==================DEFINE TEST========================
 #if strategy is not set, pick first one banner and go on
@@ -64,8 +73,22 @@ sub test_with_pick_second_strategy_and_many_banners(){
     ok($returned_url eq $banner_url2, 'Pick second banner banner with pick_second_banner strategy');
 }
 
+#case when strategy can-not pick one banner
+sub test_pick_no_banners_case(){
+	    my $impression_obj = Impressions::Impression->new({
+                    'database' => $test_database,
+                    'banners_strategies' => {
+                        $random_strategy_name => Impressions::BannersStrategies::PickSecondStrategy->new(),
+                        $pick_second_strategy_name => Impressions::BannersStrategies::PickSecondStrategy->new(),
+                    },
+                }); 
+    my $returned_url = $impression_obj->get_banner_url($target_id3); 
+    ok($returned_url eq '', 'Return empty string if banner can not be found');
+}
+
 #==================RUN TEST========================
 test_without_strategies();
 test_with_pick_second_strategy_and_many_banners();
+test_pick_no_banners_case();
 
 $test_utils->clear_collections();#clear dataset after testing
