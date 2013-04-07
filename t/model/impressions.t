@@ -53,5 +53,6 @@ sub test_with_random_strategy(){
 
 #==================RUN TEST========================
 test_without_strategies();
+test_with_random_strategy();
 
 $test_utils->clear_collections();#clear dataset after testing

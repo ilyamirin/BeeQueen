@@ -18,3 +18,5 @@ sub pick_banner(){
 	
 	return $picked_banner;
 }
+
+1;
