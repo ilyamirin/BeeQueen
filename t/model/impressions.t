@@ -1,4 +1,4 @@
-use Test::Simple tests=> 2;
+use Test::Simple tests=> 3;
 use warnings;
 use strict;
 
@@ -27,6 +27,17 @@ $test_utils->set_target_banner_strategy($target_id, $random_strategy_name);
 my $banner_url = 'fancy banner url';
 my $banner_prob = 0.2;
 my $banner_oid = $test_utils->create_banner($target_id, $banner_url, $banner_prob);
+#===Data for test with numerious banners===
+
+my $target_id2 = 'target od 2';
+my $target_name2 = 'target_name 2';
+
+my $target_oid2 = $test_utils->create_target($target_id2, $target_name);
+$test_utils->set_target_banner_strategy($target_id2, $random_strategy_name);
+
+$banner_oid = $test_utils->create_banner($target_id2, $banner_url, $banner_prob);
+my $banner_url2 = 'new url';
+my $banner_oid2 = $test_utils->create_banner($target_id2, $banner_url2, $banner_prob);
 
 #==================DEFINE TEST========================
 #if strategy is not set, pick first one banner and go on
@@ -51,8 +62,21 @@ sub test_with_random_strategy(){
     ok($returned_url eq $banner_url, 'Pick first one target banner with random strategy');
 }
 
+#test with random strategy and two banners
+sub test_with_random_strategy_and_many_banners(){
+    my $impression_obj = Impressions::Impression->new({
+                    'database' => $test_database,
+                    'banners_strategies' => {
+                    	$random_strategy_name => Impressions::BannersStrategies::RandomStrategy->new(),
+                    },
+                }); 
+    my $returned_url = $impression_obj->get_banner_url($target_id2); 
+    ok($returned_url eq $banner_url, 'Pick first one target banner with random strategy');
+}
+
 #==================RUN TEST========================
 test_without_strategies();
 test_with_random_strategy();
+test_with_random_strategy_and_many_banners();
 
 $test_utils->clear_collections();#clear dataset after testing
