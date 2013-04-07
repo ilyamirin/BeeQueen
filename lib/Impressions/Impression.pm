@@ -61,10 +61,12 @@ in database.
 # See Also   : get_banner function
  sub __get_banners_list(){
  	my ($self, $target) = @_;
- 	my $banners_query = { '_id' => { '$in' => $target->{ 'banners' } } };
-	my $banners_collection = $self->database->get_collection($BANNERS_COLLECTION_NAME);
-    my @banners = $banners_collection->find( $banners_query )->all();
-    
+ 	my @banners = ();
+ 	if(exists($target->{'banners'})){
+	 	my $banners_query = { '_id' => { '$in' => $target->{ 'banners' } } };
+		my $banners_collection = $self->database->get_collection($BANNERS_COLLECTION_NAME);
+	    @banners = $banners_collection->find( $banners_query )->all();
+ 	}
     return @banners;
  }
  
