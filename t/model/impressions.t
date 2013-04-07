@@ -1,0 +1,33 @@
+use Test::Simple tests=> 1;
+use warnings;
+use strict;
+
+
+use Impressions::Impression; 
+
+use MongoDB;
+use MongoDB::MongoClient;
+use MongoDB::OID;
+use TestUtils::TestUtilsMongo;
+
+my $mongo = MongoDB::MongoClient->new;
+my $test_database = $mongo->get_database('test');
+
+#==================PREPARE DATA====================
+my $test_utils = TestUtils::TestUtilsMongo->new({'database' => $test_database});
+
+my $target_id = 'target_id_1';
+my $target_name = 'target name simple';
+my $target_oid = $test_utils->create_target($target_id, $target_name);
+
+my $banner_url = 'fancy banner url';
+my $banner_prob = 0.2;
+my $banner_oid = $test_utils->create_banner($target_id, $banner_url, $banner_prob);
+#==================RUN TEST========================
+my $impression_obj = Impressions::Impression->new({
+					'database' => $test_database,
+				}); 
+my $returned_url = $impression_obj->get_banner_url($target_id);
+
+
+ok($returned_url == $banner_url, 'Find nothing it is okey');
