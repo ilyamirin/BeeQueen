@@ -1,4 +1,4 @@
-use Test::Simple tests=> 3;
+use Test::Simple tests=> 2;
 use warnings;
 use strict;
 
@@ -9,7 +9,6 @@ use MongoDB;
 use MongoDB::MongoClient;
 use MongoDB::OID;
 use TestUtils::TestUtilsMongo;
-use Impressions::BannersStrategies::RandomStrategy;
 use Impressions::BannersStrategies::PickSecondStrategy;
 
 my $mongo = MongoDB::MongoClient->new;
@@ -24,13 +23,12 @@ my $target_name = 'target name simple';
 my $target_oid = $test_utils->create_target($target_id, $target_name);
 my $random_strategy_name = 'random';
 my $pick_second_strategy_name = 'pick_second';
-$test_utils->set_target_banner_strategy($target_id, $random_strategy_name);
 
 my $banner_url = 'fancy banner url';
 my $banner_prob = 0.2;
 my $banner_oid = $test_utils->create_banner($target_id, $banner_url, $banner_prob);
-#===Data for test with numerious banners===
 
+#===Data for test with numerious banners===
 my $target_id2 = 'target od 2';
 my $target_name2 = 'target_name 2';
 
@@ -52,17 +50,6 @@ sub test_without_strategies(){
 	ok($returned_url eq $banner_url, 'Pick first one target banner if no strategy was not set');	    	
 }
 
-#test with one rough random strategy
-sub test_with_random_strategy(){
-    my $impression_obj = Impressions::Impression->new({
-                    'database' => $test_database,
-                    'banners_strategies' => {
-                    	$random_strategy_name => Impressions::BannersStrategies::RandomStrategy->new(),
-                    },
-                }); 
-    my $returned_url = $impression_obj->get_banner_url($target_id); 
-    ok($returned_url eq $banner_url, 'Pick first one target banner with random strategy');
-}
 
 #test with random strategy and two banners
 sub test_with_pick_second_strategy_and_many_banners(){
@@ -79,7 +66,6 @@ sub test_with_pick_second_strategy_and_many_banners(){
 
 #==================RUN TEST========================
 test_without_strategies();
-test_with_random_strategy();
 test_with_pick_second_strategy_and_many_banners();
 
 $test_utils->clear_collections();#clear dataset after testing
