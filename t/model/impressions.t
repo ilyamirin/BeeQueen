@@ -22,6 +22,7 @@ my $target_id = 'target_id_1';
 my $target_name = 'target name simple';
 my $target_oid = $test_utils->create_target($target_id, $target_name);
 my $random_strategy_name = 'random';
+my $pick_second_strategy_name = 'pick_second';
 $test_utils->set_target_banner_strategy($target_id, $random_strategy_name);
 
 my $banner_url = 'fancy banner url';
@@ -33,7 +34,7 @@ my $target_id2 = 'target od 2';
 my $target_name2 = 'target_name 2';
 
 my $target_oid2 = $test_utils->create_target($target_id2, $target_name);
-$test_utils->set_target_banner_strategy($target_id2, $random_strategy_name);
+$test_utils->set_target_banner_strategy($target_id2, $pick_second_strategy_name);
 
 $banner_oid = $test_utils->create_banner($target_id2, $banner_url, $banner_prob);
 my $banner_url2 = 'new url';
@@ -63,15 +64,16 @@ sub test_with_random_strategy(){
 }
 
 #test with random strategy and two banners
-sub test_with_random_strategy_and_many_banners(){
+sub test_with_pick_second_strategy_and_many_banners(){
     my $impression_obj = Impressions::Impression->new({
                     'database' => $test_database,
                     'banners_strategies' => {
-                    	$random_strategy_name => Impressions::BannersStrategies::RandomStrategy->new(),
+                    	$random_strategy_name => Impressions::BannersStrategies::PickSecondStrategy->new(),
+                    	$pick_second_strategy_name => Impressions::BannersStrategies::PickSecondStrategy->new(),
                     },
                 }); 
     my $returned_url = $impression_obj->get_banner_url($target_id2); 
-    ok($returned_url eq $banner_url, 'Pick first one target banner with random strategy');
+    ok($returned_url eq $banner_url2, 'Pick random banner with random strategy');
 }
 
 #==================RUN TEST========================
