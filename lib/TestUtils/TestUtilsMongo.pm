@@ -6,6 +6,10 @@ use MongoDB;
 use MongoDB::MongoClient;
 use MongoDB::OID;
 
+=pod
+=head1 TestUtils::TestUtilsMongo
+This module is just set of procedures that can help to create test entities in database
+=cut
 
  #database handler
  has 'database' => (is => 'ro',);

@@ -24,14 +24,19 @@ my $target_oid = $test_utils->create_target($target_id, $target_name);
 my $banner_url = 'fancy banner url';
 my $banner_prob = 0.2;
 my $banner_oid = $test_utils->create_banner($target_id, $banner_url, $banner_prob);
+
+#==================DEFINE TEST========================
+
+sub test_without_strategies(){
+    my $impression_obj = Impressions::Impression->new({
+                    'database' => $test_database,
+                    'banners_strategies' => {},
+                }); 
+	my $returned_url = $impression_obj->get_banner_url($target_id);	
+	ok($returned_url eq $banner_url, 'Pick first one target banner if no strategy was not set');	    	
+}
+
 #==================RUN TEST========================
-my $impression_obj = Impressions::Impression->new({
-					'database' => $test_database,
-					'banners_strategies' => {},
-				}); 
-my $returned_url = $impression_obj->get_banner_url($target_id);
-
-
-ok($returned_url eq $banner_url, 'Find nothing it is okey');
+test_without_strategies();
 
 $test_utils->clear_collections();#clear dataset after testing
