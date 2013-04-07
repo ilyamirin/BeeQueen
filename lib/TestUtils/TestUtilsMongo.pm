@@ -82,7 +82,7 @@ sub set_target_banner_strategy(){
 	
 	my $targets_collection = $self->database->get_collection('targets');
     $targets_collection->update({'target_id' => $target_id}, 
-                                {'$set' => {'banners_strategy' => $strategy_name}});
+                                {'$set' => {'banner_strategy' => $strategy_name}});
 }
 
 1;
