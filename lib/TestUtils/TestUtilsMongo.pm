@@ -68,5 +68,22 @@ sub create_banner(){
  	return $banner_oid;
 }
 
+############################################
+# Usage      : $test_utils->set_target_banner_strategy($target_id, $strategy_name)
+# Purpose    : Set strategy name for banner
+# Returns    : none
+# Parameters : target id - an id of target as a sting, 
+#               strategy_name - a string that represents strategy name in system 
+# Throws     : no exceptions
+# Comments   : ???
+# See Also   : n/a
+sub set_target_banner_strategy(){
+	my ($self, $target_id, $strategy_name) = @_;
+	
+	my $targets_collection = $self->database->get_collection('targets');
+    $targets_collection->update({'target_id' => $target_id}, 
+                                {'$set' => {'banners_strategy' => $strategy_name}});
+}
+
 1;
 
