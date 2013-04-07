@@ -10,6 +10,14 @@ use MongoDB::OID;
  #database handler
  has 'database' => (is => 'ro',);
  
+ sub clear_collections(){
+ 	my ($self) = @_;
+ 	my $targets_collection = $self->database->get_collection('targets');
+ 	$targets_collection->drop();
+ 	my $banners_collection = $self->database->get_collection('banners');
+ 	$banners_collection->drop();
+ }
+ 
  sub create_target(){
  	my ($self, $target_id, $target_name) = @_;
  	my $targets_collection = $self->database->get_collection('targets');
