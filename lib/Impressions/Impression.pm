@@ -59,7 +59,7 @@ in database.
 # Throws     : no exceptions
 # Comments   : ???
 # See Also   : get_banner function
- sub __get_bunners_list(){
+ sub __get_banners_list(){
  	my ($self, $target) = @_;
  	my $banners_query = { '_id' => { '$in' => $target->{ 'banners' } } };
 	my $banners_collection = $self->database->get_collection($BANNERS_COLLECTION_NAME);
