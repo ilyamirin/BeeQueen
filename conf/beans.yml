@@ -1,0 +1,10 @@
+mongo:
+    class: 'MongoDB::MongoClient'
+    args:
+        db_name: 'test'
+            
+impression_service:
+    class: 'Impressions::Impression'
+    args:
+        database: {ref: 'mongo'}
+        banners_strategies : {}
