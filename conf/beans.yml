@@ -1,10 +1,14 @@
 mongo:
     class: 'MongoDB::MongoClient'
-    args:
-        db_name: 'test'
             
+test_database:
+    class: 'Misc::MongoDatabase'
+    method: 'get_database'
+    args: 
+        -  {ref: 'mongo'}
+        -  'test'            
 impression_service:
     class: 'Impressions::Impression'
     args:
-        database: {ref: 'mongo'}
+        database: {ref: 'test_database'}
         banners_strategies : {}
