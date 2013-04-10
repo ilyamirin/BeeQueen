@@ -1,6 +1,6 @@
 package BeeQueen;
 
-#use lib 'lib'
+use lib './lib';
 use Mojo::Base 'Mojolicious';
 use Mojolicious::Plugin::BeamWire;
 
@@ -38,7 +38,7 @@ Initialyse application
       my $target_url = $impression_service->get_banner_url($target_id, $user_id);
       $self->render(json => {
       	url => $target_url, 
-      });
+      });      
     } => 'index');	
 }
 
