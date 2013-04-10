@@ -8,6 +8,7 @@ use constant DAY_STAT_COLLECTION_NAME = 'imp_dayly_stat';
 use constant MONTH_STAT_COLLECTION_NAME = 'imp_dayly_stat';
 use constant HOUR_STAT_COLLECTION_NAME = 'imp_dayly_stat';
 
+has 'database' => (is => 'ro');
 
 #########################################################################
 # Usage      : $status = update_impression_stat($target_id, $banner_id);
@@ -21,5 +22,19 @@ use constant HOUR_STAT_COLLECTION_NAME = 'imp_dayly_stat';
 sub update_impression_stat(){
 	my ($self, $target_id, $banner_id) = @_;
 }
+
+sub __update_month_stat(){
+	my ($self, $target_id, $banner_id) = @_;
+    my $month_collection = $self->database->get_collection($BANNERS_COLLECTION_NAME);   
+}
+
+sub __update_day_stat(){
+	my ($self, $target_id, $banner_id) = @_;
+}
+
+sub __update_hour_stat(){
+	my ($self, $target_id, $banner_id) = @_;
+}
+
 
 1;
