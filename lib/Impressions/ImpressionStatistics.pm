@@ -4,9 +4,9 @@ use strict;
 use warnings;
 use Moo;
 
-use constant DAY_STAT_COLLECTION_NAME = 'imp_dayly_stat';
-use constant MONTH_STAT_COLLECTION_NAME = 'imp_dayly_stat';
-use constant HOUR_STAT_COLLECTION_NAME = 'imp_dayly_stat';
+use constant DAY_STAT_COLLECTION_NAME =>'imp_dayly_stat';
+use constant MONTH_STAT_COLLECTION_NAME => 'imp_dayly_stat';
+use constant HOUR_STAT_COLLECTION_NAME => 'imp_dayly_stat';
 
 has 'database' => (is => 'ro');
 
