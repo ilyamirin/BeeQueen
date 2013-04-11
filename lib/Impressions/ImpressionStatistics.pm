@@ -22,8 +22,8 @@ has 'database' => (is => 'ro');
 sub update_impression_stat(){
 	my ($self, $target_id, $banner_id) = @_;
 	my $hour_status = $self->__update_hour_stat($target_id, $banner_id);
-	my $hour_status = $self->__update_day_stat($target_id, $banner_id);
-	my $hour_status = $self->__update_month_stat($target_id, $banner_id);
+	my $day_status = $self->__update_day_stat($target_id, $banner_id);
+	my $week_status = $self->__update_month_stat($target_id, $banner_id);
 }
 
 sub __update_month_stat(){
