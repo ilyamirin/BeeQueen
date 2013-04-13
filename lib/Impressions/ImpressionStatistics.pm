@@ -3,15 +3,15 @@ package Impressions::ImpressionStatistics;
 use strict;
 use warnings;
 use Moo;
+use MongoDB::BSON;
+$MongoDB::BSON::looks_like_number = 1;
 
-use constant DAY_STAT_COLLECTION_NAME =>'imp_dayly_stat';
-use constant MONTH_STAT_COLLECTION_NAME => 'imp_dayly_stat';
-use constant HOUR_STAT_COLLECTION_NAME => 'imp_dayly_stat';
+use constant IMPR_STAT_NAME_COLLECTION_NAME =>'impr_stat';
 
 has 'database' => (is => 'ro');
 
 #########################################################################
-# Usage      : $status = update_impression_stat($target_id, $banner_id);
+# Usage      : $status = update_impression_stat($target_id, $banner_id, $user_id);
 # Purpose    : update banner statistics for given target
 # Returns    : operation status 1 if ok and 0 otherwise 
 # Parameters : target_id - id of target
@@ -20,41 +20,39 @@ has 'database' => (is => 'ro');
 # Comments   : ???
 # See Also   : n/a
 sub update_impression_stat(){
-	my ($self, $target_id, $banner_id) = @_;
-	my $hour_status = $self->__update_hour_stat($target_id, $banner_id);
-	my $day_status = $self->__update_day_stat($target_id, $banner_id);
-	my $week_status = $self->__update_month_stat($target_id, $banner_id);
-}
-
-sub __update_month_stat(){
-	my ($self, $target_id, $banner_id) = @_;
-    my $month_collection = $self->database->get_collection(MONTH_STAT_COLLECTION_NAME);
-    my $status = $month_collection->update({'target_id' => $target_id, 'banner_id' => $banner_id},
-                                {'$inc' => {'count' => 1}},
-                                {'upsert' => 1}
-                            );
+	my ($self, $target_id, $banner_id, $user_id) = @_;
+	
+	my $impressions_collection = $self->database->get_collection(IMPR_STAT_NAME_COLLECTION_NAME);
+    my $status = $impressions_collection->insert({
+    	'target_id' => $target_id, 
+    	'banner_id' => $banner_id,
+    	'user_id' => $user_id,
+    	'time' => time()
+    });
     return $status;   
+	
 }
 
-sub __update_day_stat(){
+#########################################################################
+# Usage      : $statistics = find_by_target_banner($target_id, $banner_id);
+# Purpose    : get all impressions records in database by target and banner ids
+#              initally this method is targeted to be used only in tests 
+# Returns    : array of hashes ({target_id => '', banner_id, user_id, time}, ...) 
+# Parameters : target_id - id of target
+#               banner_id - id of banner 
+# Throws     : no exceptions
+# Comments   : ???
+# See Also   : n/a
+sub find_by_target_banner(){
 	my ($self, $target_id, $banner_id) = @_;
-	my $day_collection = $self->database->get_collection(DAY_STAT_COLLECTION_NAME);
-    my $status = $day_collection->update({'target_id' => $target_id, 'banner_id' => $banner_id},
-                                {'$inc' => {'count' => 1}},
-                                {'upsert' => 1}
-                            );
-    return $status;
+	
+	my $impressions_collection = $self->database->get_collection(IMPR_STAT_NAME_COLLECTION_NAME);
+	my $impressions = $impressions_collection->find({
+		'target_id' => $target_id,
+		'banner_id' => $banner_id
+	})->all();
+	
+	return $impressions;
 }
-
-sub __update_hour_stat(){
-	my ($self, $target_id, $banner_id) = @_;
-	my $hour_collection = $self->database->get_collection(MONTH_STAT_COLLECTION_NAME);
-    my $status = $hour_collection->update({'target_id' => $target_id, 'banner_id' => $banner_id},
-                                {'$inc' => {'count' => 1}},
-                                {'upsert' => 1}
-                            );
-    return $status;
-}
-
 
 1;
