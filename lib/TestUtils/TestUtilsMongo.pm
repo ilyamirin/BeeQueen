@@ -5,6 +5,7 @@ use Moo;
 use MongoDB;
 use MongoDB::MongoClient;
 use MongoDB::OID;
+use Impressions::ImpressionStatistics;
 
 =pod
 =head1 TestUtils::TestUtilsMongo
@@ -28,6 +29,9 @@ This module is just set of procedures that can help to create test entities in d
  	$targets_collection->drop();
  	my $banners_collection = $self->database->get_collection('banners');
  	$banners_collection->drop();
+ 	my $impressions_collection = $self->database->get_collection(Impressions::ImpressionStatistics::IMPR_STAT_NAME_COLLECTION_NAME);
+ 	$impressions_collection->drop();
+ 	
  }
  
 ############################################
