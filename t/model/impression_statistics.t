@@ -1,4 +1,4 @@
-use Test::Simple tests=> 3;
+use Test::Simple tests=> 1;
 use warnings;
 use strict;
 
@@ -29,9 +29,10 @@ sub test_update_view_statistics(){
 		my $user_id_iter = $user_id . $update_couner;
 	    $impression_stat->update_impression_stat($target_id, $banner_id);
 	}
-	
+	my @impressions = $impression_stat->find_by_target_banner($target_id, $banner_id);
+	ok(@impressions == 4, 'Impression size is ok');
 }
 
 #==================RUN TEST========================
-
+test_update_view_statistics();
 $test_utils->clear_collections();#clear dataset after testing

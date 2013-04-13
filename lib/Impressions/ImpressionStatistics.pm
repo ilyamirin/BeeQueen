@@ -47,12 +47,12 @@ sub find_by_target_banner(){
 	my ($self, $target_id, $banner_id) = @_;
 	
 	my $impressions_collection = $self->database->get_collection(IMPR_STAT_NAME_COLLECTION_NAME);
-	my $impressions = $impressions_collection->find({
+	my @impressions = $impressions_collection->find({
 		'target_id' => $target_id,
 		'banner_id' => $banner_id
 	})->all();
 	
-	return $impressions;
+	return @impressions;
 }
 
 1;
