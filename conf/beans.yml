@@ -6,7 +6,11 @@ test_database:
     method: 'get_database'
     args: 
         -  {ref: 'mongo'}
-        -  'test'            
+        -  'test'
+impression_statistics:
+    class: 'Impressions::ImpressionStatistics'
+    args:
+        database: {ref: 'test_database'}            
 impression_service:
     class: 'Impressions::Impression'
     args:
