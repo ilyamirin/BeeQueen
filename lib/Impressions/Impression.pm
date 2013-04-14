@@ -16,6 +16,8 @@ in database.
  has 'database' => (is => 'ro',);
  #banners_strategies hash reference {'banner_strategy_name' => $banners_strategy}
  has 'banners_strategies' => (is => 'ro');
+ #service to register impression statistics
+ has 'impression_registrar' => (is => 'ro');
  
  our $TARGET_COLLECTION_NAME = 'targets';
  our $BANNERS_COLLECTION_NAME = 'banners';
@@ -45,9 +47,9 @@ in database.
     	my $banner = $self->__pick_right_banner(\@banners_list, $banner_pick_strategy, $user_id);
     	if(defined $banner && $banner){
     		$url = $banner->{'url'};
+    		$self->impression_registrar->register_impression_stat($target_id, $banner->{'_id'}, $user_id);
     	}
-	}
- 	
+	} 	
  	return $url;
  }
 
