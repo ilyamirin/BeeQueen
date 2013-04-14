@@ -7,7 +7,7 @@ test_database:
     args: 
         -  {ref: 'mongo'}
         -  'test'
-impression_statistics:
+impression_registrar:
     class: 'Impressions::ImpressionStatistics'
     args:
         database: {ref: 'test_database'}            
@@ -16,3 +16,4 @@ impression_service:
     args:
         database: {ref: 'test_database'}
         banners_strategies : {}
+        impression_registrar: {ref: 'impression_registrar'}
