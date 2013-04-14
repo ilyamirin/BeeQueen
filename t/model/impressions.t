@@ -1,7 +1,7 @@
 use Test::Simple tests=> 3;
 use warnings;
 use strict;
-
+use Test::MockObject;
 
 use Impressions::Impression; 
 
@@ -48,12 +48,16 @@ $test_utils->set_target_banner_strategy($target_id3, $pick_second_strategy_name)
 
 $banner_oid2 = $test_utils->create_banner($target_id3, $banner_url, $banner_prob);
 
+
+my $impression_statistics = my $mock = Test::MockObject->new();
+$impression_statistics->set_true( 'register_impression_stat' );
 #==================DEFINE TEST========================
 #if strategy is not set, pick first one banner and go on
 sub test_without_strategies(){
     my $impression_obj = Impressions::Impression->new({
                     'database' => $test_database,
                     'banners_strategies' => {},
+                    'impression_registrar' => $impression_statistics,
                 }); 
 	my $returned_url = $impression_obj->get_banner_url($target_id);	
 	ok($returned_url eq $banner_url, 'Pick first one target banner if no strategy was not set');	    	
@@ -68,6 +72,7 @@ sub test_with_pick_second_strategy_and_many_banners(){
                     	$random_strategy_name => Impressions::BannersStrategies::PickSecondStrategy->new(),
                     	$pick_second_strategy_name => Impressions::BannersStrategies::PickSecondStrategy->new(),
                     },
+                    'impression_registrar' => $impression_statistics,
                 }); 
     my $returned_url = $impression_obj->get_banner_url($target_id2); 
     ok($returned_url eq $banner_url2, 'Pick second banner banner with pick_second_banner strategy');
@@ -81,6 +86,7 @@ sub test_pick_no_banners_case(){
                         $random_strategy_name => Impressions::BannersStrategies::PickSecondStrategy->new(),
                         $pick_second_strategy_name => Impressions::BannersStrategies::PickSecondStrategy->new(),
                     },
+                    'impression_registrar' => $impression_statistics,
                 }); 
     my $returned_url = $impression_obj->get_banner_url($target_id3); 
     ok($returned_url eq '', 'Return empty string if banner can not be found');
