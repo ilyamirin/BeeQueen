@@ -14,7 +14,7 @@ my %args = (
  ################Prepare some data#################
  
  
- my @tests = ('model/impressions.t');
+ my @tests = ('model/impressions.t', 'model/impression_statistics.t');
  $harness->runtests(@tests);
  
  
