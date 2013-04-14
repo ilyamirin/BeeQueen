@@ -11,7 +11,7 @@ use constant IMPR_STAT_NAME_COLLECTION_NAME =>'impr_stat';
 has 'database' => (is => 'ro');
 
 #########################################################################
-# Usage      : $status = update_impression_stat($target_id, $banner_id, $user_id);
+# Usage      : $status = register_impression_stat($target_id, $banner_id, $user_id);
 # Purpose    : update banner statistics for given target
 # Returns    : operation status 1 if ok and 0 otherwise 
 # Parameters : target_id - id of target
@@ -19,7 +19,7 @@ has 'database' => (is => 'ro');
 # Throws     : no exceptions
 # Comments   : ???
 # See Also   : n/a
-sub update_impression_stat(){
+sub register_impression_stat(){
 	my ($self, $target_id, $banner_id, $user_id) = @_;
 	
 	my $impressions_collection = $self->database->get_collection(IMPR_STAT_NAME_COLLECTION_NAME);
