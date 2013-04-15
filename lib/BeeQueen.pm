@@ -5,7 +5,6 @@ use Mojo::Base 'Mojolicious';
 use Mojolicious::Plugin::BeamWire;
 
 use File::Basename;
-my $dirname = dirname(__FILE__);
 
 =head3 
 This class is the entry point to CAP provider 
