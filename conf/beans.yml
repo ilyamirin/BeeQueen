@@ -12,7 +12,8 @@ impression_registrar:
     class: 'Impressions::ImpressionStatistics'
     args:
         database: {ref: 'test_database'}
-                    
+random_strategy: 
+    class: 'Impressions::BannersStrategies::RandomStrategy'                    
 impression_service:
     class: 'Impressions::Impression'
     args:
