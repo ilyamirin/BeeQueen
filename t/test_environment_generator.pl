@@ -10,10 +10,17 @@ use strict;
 use warnings;
 
 use MongoDB;
+use Beam::Wire;
+use File::Basename;
 use TestUtils::TestUtilsMongo;
 
-my $mongo         = MongoDB::MongoClient->new;
-my $test_database = $mongo->get_database('development');
+
+my $current_working_directory  = dirname(__FILE__);
+my $beans_file = $current_working_directory . "/../conf/beans.yml";
+
+my $wire  = Beam::Wire->new( {'file' => $beans_file} );
+
+my $test_database = $wire->get('test_database');
 
 my $test_utils =
   TestUtils::TestUtilsMongo->new( { 'database' => $test_database } );
