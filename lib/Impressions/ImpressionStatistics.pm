@@ -14,8 +14,9 @@ has 'database' => (is => 'ro');
 # Usage      : $status = register_impression_stat($target_id, $banner_id, $user_id);
 # Purpose    : update banner statistics for given target
 # Returns    : operation status 1 if ok and 0 otherwise 
-# Parameters : target_id - id of target
-#               banner_id - id of banner 
+# Parameters : target_id - id of a target
+#               banner_id - id of  a banner
+#               user_id - id of an uesr 
 # Throws     : no exceptions
 # Comments   : ???
 # See Also   : n/a
