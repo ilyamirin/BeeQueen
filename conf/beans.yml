@@ -18,5 +18,8 @@ impression_service:
     class: 'Impressions::Impression'
     args:
         database: {ref: 'test_database'}
-        banners_strategies : {}
+        banners_strategies : 
+            {
+                random:  {ref : 'random_strategy'}
+            }
         impression_registrar: {ref: 'impression_registrar'}
