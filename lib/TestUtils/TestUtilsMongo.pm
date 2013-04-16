@@ -6,7 +6,7 @@ use MongoDB;
 use MongoDB::MongoClient;
 use MongoDB::OID;
 use Impressions::ImpressionStatistics;
-
+use Impressions::Impression;
 =pod
 =head1 TestUtils::TestUtilsMongo
 This module is just set of procedures that can help to create test entities in database
@@ -25,12 +25,14 @@ This module is just set of procedures that can help to create test entities in d
 # See Also   : n/a
  sub clear_collections(){
  	my ($self) = @_;
- 	my $targets_collection = $self->database->get_collection('targets');
+ 	my $targets_collection = $self->database->get_collection(Impressions::Impression::TARGET_COLLECTION_NAME);
  	$targets_collection->drop();
- 	my $banners_collection = $self->database->get_collection('banners');
+ 	my $banners_collection = $self->database->get_collection(Impressions::Impression::BANNERS_COLLECTION_NAME);
  	$banners_collection->drop();
  	my $impressions_collection = $self->database->get_collection(Impressions::ImpressionStatistics::IMPR_STAT_NAME_COLLECTION_NAME);
  	$impressions_collection->drop();
+ 	my $clicks_collection = $self->database->get_collection(Clicks::ClicksService::CLICKS_COLLECTION_NAME);
+ 	$clicks_collection->drop();
  	
  }
  
