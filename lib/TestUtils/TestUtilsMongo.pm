@@ -7,6 +7,7 @@ use MongoDB::MongoClient;
 use MongoDB::OID;
 use Impressions::ImpressionStatistics;
 use Impressions::Impression;
+use Clicks::ClicksService;
 =pod
 =head1 TestUtils::TestUtilsMongo
 This module is just set of procedures that can help to create test entities in database
