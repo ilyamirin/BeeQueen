@@ -41,4 +41,19 @@ sub register_click(){
     
 }
 
+#########################################################################
+# Usage      : $url_to_redirect = __find_url_to_redirect_for_banner($banner_id);
+# Purpose    : get url to redirect user it for a particular banner
+# Returns    : string for full url to redirect (http://some.domain/route) 
+# Parameters : banner_id - id of a banner
+# Throws     : no exceptions
+# Comments   : ???
+# See Also   : n/a
+sub __find_url_to_redirect_for_banner(){
+	my ($self, $banner_id) = @_;
+	
+    $banners_collection = 	
+}
+
+
 1;
