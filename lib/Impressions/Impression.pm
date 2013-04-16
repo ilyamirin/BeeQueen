@@ -12,6 +12,10 @@ strategies this class picks banner for given target, and saves information about
 in database.
 =cut
 
+use constant TARGET_COLLECTION_NAME => 'targets';
+use constant BANNERS_COLLECTION_NAME => 'banners';
+
+
  #database handler
  has 'database' => (is => 'ro',);
  #banners_strategies hash reference {'banner_strategy_name' => $banners_strategy}
@@ -19,9 +23,6 @@ in database.
  #service to register impression statistics
  has 'impression_registrar' => (is => 'ro');
  
- our $TARGET_COLLECTION_NAME = 'targets';
- our $BANNERS_COLLECTION_NAME = 'banners';
-
 ############################################
 # Usage      : $url = get_banner('target_12', 'some_user_id');
 # Purpose    : get bunner url depending on target and users ids and database
@@ -35,7 +36,7 @@ in database.
  sub get_banner_url(){
  	my ($self, $target_id, $user_id) = @_;
  	
- 	my $targets_collection = $self->database->get_collection( $TARGET_COLLECTION_NAME );#obtain targets collection
+ 	my $targets_collection = $self->database->get_collection( TARGET_COLLECTION_NAME );#obtain targets collection
  	my $target_cursor = $targets_collection->find({'target_id' => $target_id});
  	
  	my $url = '';
@@ -66,7 +67,7 @@ in database.
  	my @banners = ();
  	if(exists($target->{'banners'})){
 	 	my $banners_query = { '_id' => { '$in' => $target->{ 'banners' } } };
-		my $banners_collection = $self->database->get_collection($BANNERS_COLLECTION_NAME);
+		my $banners_collection = $self->database->get_collection(BANNERS_COLLECTION_NAME);
 	    @banners = $banners_collection->find( $banners_query )->all();
  	}
     return @banners;
