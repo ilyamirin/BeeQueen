@@ -100,4 +100,5 @@ use constant BANNERS_COLLECTION_NAME => 'banners';
  	return $banner;
  }
  
+ 1;
  
