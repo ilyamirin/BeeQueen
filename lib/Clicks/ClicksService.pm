@@ -30,8 +30,8 @@ use constant CLICKS_COLLECTION_NAME => 'clicks';
 sub process_click(){
     my ($self, $target_id, $banner_id, $user_id) = @_;
     
-    $redirect_url = $self->__find_url_to_redirect_for_banner($banner_id);
-    
+    my $redirect_url = $self->__find_url_to_redirect_for_banner($banner_id);
+    my $status = $self->__register_click($target_id, $banner_id, $user_id);
     return $redirect_url;      
 }
 
@@ -71,10 +71,10 @@ sub __find_url_to_redirect_for_banner(){
 	my ($self, $banner_id) = @_;
 	
     my $banners_collection = $self->database->get_collection(Impressions::Impression::BANNERS_COLLECTION_NAME);
-    my @banners_array = $banners_collection->find({}'_id' => $banner_id})->all();
+    my @banners_array = $banners_collection->find({'_id' => $banner_id})->all();
     my $redirect_url = "";
     if(@banners_array > 0){
-    	$banner = $banners_array[0];
+    	my $banner = $banners_array[0];
     	$redirect_url = $banner->{'redirect_url'};
     }	
     
