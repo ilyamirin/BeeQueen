@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use Moo;
-
+use Impressions::Impression;
 =pod
 =head1 Clicks::ClicksService
 This class will deal with clicks transactions. It will receive information about click action 
@@ -18,7 +18,26 @@ use constant CLICKS_COLLECTION_NAME => 'clicks';
  
 
 #########################################################################
-# Usage      : $status = register_click($target_id, $banner_id, $user_id);
+# Usage      : $status = process_click($target_id, $banner_id, $user_id);
+# Purpose    : get banner redirect url and insert information about click into database
+# Returns    : url to redirect user to 
+# Parameters : target_id - id of a target
+#               banner_id - id of a banner
+#               user_id - id of an user 
+# Throws     : no exceptions
+# Comments   : ???
+# See Also   : n/a
+sub process_click(){
+    my ($self, $target_id, $banner_id, $user_id) = @_;
+    
+    $redirect_url = $self->__find_url_to_redirect_for_banner($banner_id);
+    
+    return $redirect_url;      
+}
+
+
+#########################################################################
+# Usage      : $status = __register_click($target_id, $banner_id, $user_id);
 # Purpose    : insert information about click into database
 # Returns    : operation status 1 if ok and 0 otherwise 
 # Parameters : target_id - id of a target
@@ -27,8 +46,8 @@ use constant CLICKS_COLLECTION_NAME => 'clicks';
 # Throws     : no exceptions
 # Comments   : ???
 # See Also   : n/a
-sub register_click(){
-    my ($self, $target_id, $banner_id, $user_id) = @_;
+sub __register_click(){
+	my ($self, $target_id, $banner_id, $user_id) = @_;
     
     my $impressions_collection = $self->database->get_collection(CLICKS_COLLECTION_NAME);
     my $status = $impressions_collection->insert({
@@ -37,8 +56,7 @@ sub register_click(){
         'user_id' => $user_id,
         'time' => time()
     });
-    return $status;   
-    
+    return $status;
 }
 
 #########################################################################
@@ -52,7 +70,15 @@ sub register_click(){
 sub __find_url_to_redirect_for_banner(){
 	my ($self, $banner_id) = @_;
 	
-    $banners_collection = 	
+    my $banners_collection = $self->database->get_collection(Impressions::Impression::BANNERS_COLLECTION_NAME);
+    my @banners_array = $banners_collection->find({}'_id' => $banner_id})->all();
+    my $redirect_url = "";
+    if(@banners_array > 0){
+    	$banner = $banners_array[0];
+    	$redirect_url = $banner->{'redirect_url'};
+    }	
+    
+    return $redirect_url;
 }
 
 
