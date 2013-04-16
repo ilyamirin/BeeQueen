@@ -56,15 +56,19 @@ This module is just set of procedures that can help to create test entities in d
 # Returns    : banner OID
 # Parameters : target id - id of target as a sting, 
 #               banner url - label of this target
-#               probability of given banner - number 
+#               probability of given banner - number
+#               redirect_url - url to redirect user after click on this banner 
 # Throws     : no exceptions
 # Comments   : ???
 # See Also   : n/a
 sub create_banner(){
-	my ($self, $target_id, $banner_url, $banner_prob) = @_;
+	my ($self, $target_id, $banner_url, $banner_prob, $redirect_url) = @_;
  	my $banners_collection = $self->database->get_collection('banners');
  	my $banner_oid = $banners_collection
- 					->insert({ 'url' => $banner_url, 'prob' => $banner_prob });
+ 					->insert({ 'url' => $banner_url, 
+ 						'prob' => $banner_prob,
+ 						'redirect_url' => $redirect_url
+ 						 });
  	
  	my $targets_collection = $self->database->get_collection('targets');
  	$targets_collection->update({'target_id' => $target_id}, 
