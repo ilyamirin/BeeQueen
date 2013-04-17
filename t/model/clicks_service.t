@@ -1,4 +1,4 @@
-use Test::Simple tests=> 1;
+use Test::Simple tests=> 4;
 use warnings;
 use strict;
 
@@ -36,7 +36,7 @@ sub test_test_process_click(){
         $clicks_service->process_click($target_id, $banner_id, $user_id_iter);
     }
     my @clicks = $clicks_service->find_by_target_banner($target_id, $banner_id);
-    ok(@clicks == 4, 'Impression size is ok');
+    ok(@clicks == 4, 'Clicks  size is ok');
     ok(index($clicks[0]->{'user_id'}, $user_id) >= 0, 'User was registred');
     ok($clicks[0]->{'target_id'} eq $target_id, 'target was registred');
     ok($clicks[0]->{'banner_id'} eq $banner_id, 'banner was registred');
