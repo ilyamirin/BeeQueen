@@ -48,9 +48,12 @@ Initialyse application
 	      my $target_id = $self->param('target_id') || '';
 	      my $user_id = $self->param('user_id') || '';
 	      
-	      my $clicks_service = $self->get_bean('impression_service');
+	      my $clicks_service = $self->get_bean('clicks_service');
 	      my $redirect_url = $clicks_service->process_click($target_id, $banner_id, $user_id);
-	      $self->redirect_to($redirect_url);  
+#	      $self->redirect_to($redirect_url); 
+          $self->render(json => {
+            url => $redirect_url, 
+          });       
       }    
     });	
 }
