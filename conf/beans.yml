@@ -23,3 +23,7 @@ impression_service:
                 random:  {ref : 'random_strategy'}
             }
         impression_registrar: {ref: 'impression_registrar'}
+clicks_service:
+    class: 'Clicks::ClicksService'
+    args:
+        database: {ref: 'test_database'}
