@@ -1,4 +1,4 @@
-use Test::Simple tests=> 2;
+use Test::Simple tests=> 4;
 use warnings;
 use strict;
 
@@ -27,12 +27,13 @@ sub test_update_view_statistics(){
 	my $user_id = 'user_id_';
 	foreach my $update_couner (1..4){
 		my $user_id_iter = $user_id . $update_couner;
-	    $impression_stat->register_impression_stat($target_id, $banner_id, $user_id);
+	    $impression_stat->register_impression_stat($target_id, $banner_id, $user_id_iter);
 	}
 	my @impressions = $impression_stat->find_by_target_banner($target_id, $banner_id);
 	ok(@impressions == 4, 'Impression size is ok');
-	print $impressions[1]->{'user_id'} . " <\n";
-	ok(index($impressions[0]->{'user_id'}, $user_id) >= 0, 'User was registred')
+	ok(index($impressions[0]->{'user_id'}, $user_id) >= 0, 'User was registred');
+	ok($impressions[0]->{'target_id'} eq $target_id, 'target was registred');
+	ok($impressions[0]->{'banner_id'} eq $banner_id, 'banner was registred');
 }
 
 #==================RUN TEST========================
