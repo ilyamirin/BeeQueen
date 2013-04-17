@@ -53,6 +53,7 @@ Initialyse application
 #	      $self->redirect_to($redirect_url); 
           $self->render(json => {
             'redirect_url' => $redirect_url, 
+            'banner_id' => $banner_id,
           });       
       }    
     });	
