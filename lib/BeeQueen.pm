@@ -38,7 +38,21 @@ Initialyse application
       $self->render(json => {
       	url => $target_url, 
       });      
-    } => 'index');	
+    });	
+     
+     $r->any('/click' => sub {
+      my $self = shift;
+      
+      my $banner_id = $self->param('banner_id');
+      if($banner_id){
+	      my $target_id = $self->param('target_id') || '';
+	      my $user_id = $self->param('user_id') || '';
+	      
+	      my $clicks_service = $self->get_bean('impression_service');
+	      my $redirect_url = $clicks_service->process_click($target_id, $banner_id, $user_id);
+	      $self->redirect_to($redirect_url);  
+      }    
+    });	
 }
 
 
