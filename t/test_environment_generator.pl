@@ -39,7 +39,8 @@ foreach my $banners_iter ( 1 .. 25 ) {
 
 	my $banner_url  = 'fancy banner url' . $banners_iter;
 	my $banner_prob = 0.2;
+	my $banner_redirect_url = "http://localhost/";
 	my $banner_oid =
-	  $test_utils->create_banner( $target_id, $banner_url, $banner_prob );
+	  $test_utils->create_banner( $target_id, $banner_url, $banner_prob, $banner_redirect_url );
 
 }
