@@ -37,6 +37,28 @@ sub process_click(){
 
 
 #########################################################################
+# Usage      : @cliks = find_by_target_banner($target_id, $banner_id);
+# Purpose    : get all clicks records in database by target and banner ids
+#              initally this method is targeted to be used only in tests 
+# Returns    : array of hashes ({target_id => '', banner_id, user_id, time}, ...) 
+# Parameters : target_id - id of target
+#               banner_id - id of banner 
+# Throws     : no exceptions
+# Comments   : ???
+# See Also   : n/a
+sub find_by_target_banner(){
+	my ($self, $target_id, $banner_id) = @_;
+    
+    my $clicks_collection = $self->database->get_collection(CLICKS_COLLECTION_NAME);
+    my @clicks = $clicks_collection->find({
+        'target_id' => $target_id,
+        'banner_id' => $banner_id
+    })->all();
+    
+    return @clicks;
+}
+
+#########################################################################
 # Usage      : $status = __register_click($target_id, $banner_id, $user_id);
 # Purpose    : insert information about click into database
 # Returns    : operation status 1 if ok and 0 otherwise 
@@ -49,8 +71,8 @@ sub process_click(){
 sub __register_click(){
 	my ($self, $target_id, $banner_id, $user_id) = @_;
     
-    my $impressions_collection = $self->database->get_collection(CLICKS_COLLECTION_NAME);
-    my $status = $impressions_collection->insert({
+    my $clicks_collection = $self->database->get_collection(CLICKS_COLLECTION_NAME);
+    my $status = $clicks_collection->insert({
         'target_id' => $target_id, 
         'banner_id' => $banner_id,
         'user_id' => $user_id,
