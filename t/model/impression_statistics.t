@@ -31,7 +31,8 @@ sub test_update_view_statistics(){
 	}
 	my @impressions = $impression_stat->find_by_target_banner($target_id, $banner_id);
 	ok(@impressions == 4, 'Impression size is ok');
-	ok(index($impressions[0]->{'user_id'}, $user_id) > 0, 'User was registred')
+	print $impressions[1]->{'user_id'} . " <\n";
+	ok(index($impressions[0]->{'user_id'}, $user_id) >= 0, 'User was registred')
 }
 
 #==================RUN TEST========================
