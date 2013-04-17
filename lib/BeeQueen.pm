@@ -52,7 +52,7 @@ Initialyse application
 	      my $redirect_url = $clicks_service->process_click($target_id, $banner_id, $user_id);
 #	      $self->redirect_to($redirect_url); 
           $self->render(json => {
-            url => $redirect_url, 
+            'redirect_url' => $redirect_url, 
           });       
       }    
     });	

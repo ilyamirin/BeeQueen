@@ -72,7 +72,7 @@ sub create_banner(){
  						'prob' => $banner_prob,
  						'redirect_url' => $redirect_url
  						 });
- 	
+ 	print "Banner oid: $banner_oid\n";
  	my $targets_collection = $self->database->get_collection('targets');
  	$targets_collection->update({'target_id' => $target_id}, 
  								{'$push' => {'banners' => $banner_oid}});
