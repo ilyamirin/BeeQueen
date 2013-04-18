@@ -50,7 +50,7 @@ sub test_impression(){
 }
 
 sub test_click(){
-    $t->post_ok( '/impression' => form => 
+    $t->post_ok( '/click' => form => 
                                 { 
                                 	target_id => $target_id,
                                 	banner_id => $banner_oid,
