@@ -49,8 +49,25 @@ sub test_impression(){
     
 }
 
+sub test_click(){
+    $t->post_ok( '/impression' => form => 
+                                { 
+                                	target_id => $target_id,
+                                	banner_id => $banner_oid,
+                                	user_id => 'some_user', 
+                                	
+                                } )
+   ->status_is(200)
+    
+  ->header_is( 'X-Powered-By' => 'Mojolicious (Perl)' )
+  ->header_isnt( 'X-Bender' => 'Bite my shiny metal ass!' )
+  ->json_content_is( {'redirect_url' => $redirect_url} );
+    
+}
+
 #==================RUN TEST========================
 test_impression();
+test_click();
 $test_utils->clear_collections();#clear dataset after testing
 
 
