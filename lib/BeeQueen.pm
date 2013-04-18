@@ -10,10 +10,16 @@ use File::Basename;
 This class is the entry point to CAP provider 
 =cut
 
+my $BEANS_CONF_PATH = "/../conf/beans.yml";
+
+sub testing_mode(){
+	my $self = shift;
+	$self->BEANS_CONF_PATH = "/../conf/beans_test.yml";
+}
+
 =head3 
 Initialyse application 
-=cut 
-  
+=cut   
   sub startup {
 	my $self = shift;
 	
@@ -21,7 +27,7 @@ Initialyse application
     
     $self->plugin('BeamWire',
         {
-        	'beans_conf' => $current_working_directory . "/../conf/beans.yml"
+        	'beans_conf' => $current_working_directory . $$self->BEANS_CONF_PATH,
         }
     );
     
