@@ -45,7 +45,7 @@ sub test_impression(){
     
   ->header_is( 'X-Powered-By' => 'Mojolicious (Perl)' )
   ->header_isnt( 'X-Bender' => 'Bite my shiny metal ass!' )
-  ->json_is( 'url' => $banner_url );
+  ->json_content_is( {'url' => $banner_url} );
     
 }
 
