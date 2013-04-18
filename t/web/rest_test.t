@@ -44,7 +44,6 @@ sub test_impression(){
    ->status_is(200)
     
   ->header_is( 'X-Powered-By' => 'Mojolicious (Perl)' )
-  ->header_isnt( 'X-Bender' => 'Bite my shiny metal ass!' )
   ->json_content_is( {'url' => $banner_url} );
     
 }
@@ -60,7 +59,6 @@ sub test_click(){
    ->status_is(200)
     
   ->header_is( 'X-Powered-By' => 'Mojolicious (Perl)' )
-  ->header_isnt( 'X-Bender' => 'Bite my shiny metal ass!' )
   ->json_content_is( {'redirect_url' => $redirect_url} );
     
 }
