@@ -1,0 +1,29 @@
+mongo:
+    class: 'MongoDB::MongoClient'
+            
+test_database:
+    class: 'Misc::MongoDatabase'
+    method: 'get_database'
+    args: 
+        -  {ref: 'mongo'}
+        -  'test'
+        
+impression_registrar:
+    class: 'Impressions::ImpressionStatistics'
+    args:
+        database: {ref: 'test_database'}
+random_strategy: 
+    class: 'Impressions::BannersStrategies::RandomStrategy'                    
+impression_service:
+    class: 'Impressions::Impression'
+    args:
+        database: {ref: 'test_database'}
+        banners_strategies : 
+            {
+                random:  {ref : 'random_strategy'}
+            }
+        impression_registrar: {ref: 'impression_registrar'}
+clicks_service:
+    class: 'Clicks::ClicksService'
+    args:
+        database: {ref: 'test_database'}
