@@ -1,9 +1,14 @@
+BEGIN {
+  $ENV{MOJO_MODE}    = 'testing';
+}
+
 use Test::More;
 use Test::Mojo;
 use MongoDB;
 use MongoDB::MongoClient;
 use MongoDB::OID;
 use TestUtils::TestUtilsMongo;
+use BeeQueen;
 
 
 my $mongo = MongoDB::MongoClient->new;
@@ -13,11 +18,17 @@ my $test_database = $mongo->get_database('test');
 my $test_utils = TestUtils::TestUtilsMongo->new({'database' => $test_database});
 
 $test_utils->clear_collections();#clear dataset before testing
-my $target_id = 'sdfdfs';
+my $target_id = 'target od 2';
+my $target_name = 'target_name 2';
+my $random_strategy_name = 'random';
+my $target_oid = $test_utils->create_target($target_id, $target_name);
+$test_utils->set_target_banner_strategy($target_id, $random_strategy_name);
+
 my $banner_url = 'fancy banner url';
 my $banner_prob = 0.2;
 my $redirect_url = 'redirect url';
 my $banner_oid = $test_utils->create_banner($target_id, $banner_url, $banner_prob, $redirect_url);
+
 
 my $t = Test::Mojo->new('BeeQueen');
 

@@ -14,7 +14,7 @@ my $BEANS_CONF_PATH = "/../conf/beans.yml";
 
 sub testing_mode(){
 	my $self = shift;
-	$self->BEANS_CONF_PATH = "/../conf/beans_test.yml";
+	$BEANS_CONF_PATH = "/../conf/beans_test.yml";
 }
 
 =head3 
@@ -27,7 +27,7 @@ Initialyse application
     
     $self->plugin('BeamWire',
         {
-        	'beans_conf' => $current_working_directory . $$self->BEANS_CONF_PATH,
+        	'beans_conf' => $current_working_directory . $BEANS_CONF_PATH,
         }
     );
     
