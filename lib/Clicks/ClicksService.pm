@@ -2,7 +2,7 @@ package Clicks::ClicksService;
 
 use strict;
 use warnings;
-
+use Data::Dump qw(dump);
 use Moo;
 use Impressions::Impression;
 =pod
@@ -93,10 +93,9 @@ sub __find_url_to_redirect_for_banner(){
 	my ($self, $banner_id) = @_;
 	
     my $banners_collection = $self->database->get_collection(Impressions::Impression::BANNERS_COLLECTION_NAME);
-    my @banners_array = $banners_collection->find({'_id' => $banner_id})->all();
+    my $banner = $banners_collection->find_one({'_id' => $banner_id});
     my $redirect_url = "";
-    if(@banners_array > 0){
-    	my $banner = $banners_array[0];
+    if($banner){    	
     	$redirect_url = $banner->{'redirect_url'};
     }	
     
