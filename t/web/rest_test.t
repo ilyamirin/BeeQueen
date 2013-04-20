@@ -18,10 +18,10 @@ my $test_database = $mongo->get_database('test');
 my $test_utils = TestUtils::TestUtilsMongo->new({'database' => $test_database});
 
 $test_utils->clear_collections();#clear dataset before testing
-my $target_id = 'target od 2';
 my $target_name = 'target_name 2';
 my $random_strategy_name = 'random';
-my $target_oid = $test_utils->create_target($target_id, $target_name);
+my $target_oid = $test_utils->create_target($target_name);
+my $target_id = $target_oid->to_string;
 $test_utils->set_target_banner_strategy($target_id, $random_strategy_name);
 
 my $banner_url = 'fancy banner url';
