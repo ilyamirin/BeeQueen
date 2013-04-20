@@ -18,17 +18,20 @@ my $test_database = $mongo->get_database('test');
 my $test_utils = TestUtils::TestUtilsMongo->new({'database' => $test_database});
 
 $test_utils->clear_collections();#clear dataset before testing
-my $target_id = 'sdfdfs';
+
 my $banner_url = 'fancy banner url';
 my $banner_prob = 0.2;
 my $redirect_url = 'redirect url';
+my $target_name = "target_name";
+my $target_oid = $test_utils->create_target($target_name);
+my $target_id = $target_oid->to_string();
 my $banner_oid = $test_utils->create_banner($target_id, $banner_url, $banner_prob, $redirect_url);
 
 
 #==================DEFINE TEST========================
 sub test_test_process_click(){
     my $clicks_service = Clicks::ClicksService->new({'database' => $test_database});
-    my $target_id = 'target_id_1';
+    my $target_id = $target_oid->to_string();
     my $banner_id = $banner_oid->to_string();
     my $user_id = 'user_id_';
     foreach my $update_couner (1..4){

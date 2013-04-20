@@ -51,8 +51,8 @@ sub find_by_target_banner(){
     
     my $clicks_collection = $self->database->get_collection(CLICKS_COLLECTION_NAME);
     my @clicks = $clicks_collection->find({
-        'target_id' => $target_id,
-        'banner_id' => $banner_id
+        'target_id' => MongoDB::OID->new('value' => $target_id),
+        'banner_id' => MongoDB::OID->new('value' => $banner_id),
     })->all();
     
     return @clicks;
@@ -73,8 +73,8 @@ sub __register_click(){
     
     my $clicks_collection = $self->database->get_collection(CLICKS_COLLECTION_NAME);
     my $status = $clicks_collection->insert({
-        'target_id' => $target_id, 
-        'banner_id' => $banner_id,
+        'target_id' => MongoDB::OID->new('value' => $target_id), 
+        'banner_id' => MongoDB::OID->new('value' => $banner_id),
         'user_id' => $user_id,
         'time' => time()
     });
@@ -94,7 +94,7 @@ sub __find_url_to_redirect_for_banner(){
 	
     my $banners_collection = $self->database->get_collection(Impressions::Impression::BANNERS_COLLECTION_NAME);
     my $banner_oid = MongoDB::OID->new('value' => $banner_id);
-    my $banner = $banners_collection->find_one({_id => $banner_oid});
+    my $banner = $banners_collection->find_one({'_id' => $banner_oid});
     my $redirect_url = "";
     if($banner){    	
     	$redirect_url = $banner->{'redirect_url'};
