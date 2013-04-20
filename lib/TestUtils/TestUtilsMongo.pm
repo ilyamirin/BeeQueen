@@ -46,10 +46,10 @@ This module is just set of procedures that can help to create test entities in d
 # Comments   : ???
 # See Also   : n/a
  sub create_target(){
- 	my ($self, $target_id, $target_name) = @_;
+ 	my ($self, $target_name) = @_;
  	my $targets_collection = $self->database->get_collection('targets');
  	my $target_oid = $targets_collection
- 						->save({ 'target_id' => $target_id, 'target_name' => $target_name });
+ 						->save({'target_name' => $target_name });
  	return $target_oid;
  }
 
@@ -74,7 +74,7 @@ sub create_banner(){
  						 });
  	print "Banner oid: $banner_oid\n";
  	my $targets_collection = $self->database->get_collection('targets');
- 	$targets_collection->update({'target_id' => $target_id}, 
+ 	$targets_collection->update({'_id' => MongoDB::OID->new('value' => $target_id)}, 
  								{'$push' => {'banners' => $banner_oid}});
  	return $banner_oid;
 }
@@ -92,7 +92,7 @@ sub set_target_banner_strategy(){
 	my ($self, $target_id, $strategy_name) = @_;
 	
 	my $targets_collection = $self->database->get_collection('targets');
-    $targets_collection->update({'target_id' => $target_id}, 
+    $targets_collection->update({'_id' => MongoDB::OID->new('value' => $target_id)}, 
                                 {'$set' => {'banner_strategy' => $strategy_name}});
 }
 
