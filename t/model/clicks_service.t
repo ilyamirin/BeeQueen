@@ -29,7 +29,7 @@ my $banner_oid = $test_utils->create_banner($target_id, $banner_url, $banner_pro
 sub test_test_process_click(){
     my $clicks_service = Clicks::ClicksService->new({'database' => $test_database});
     my $target_id = 'target_id_1';
-    my $banner_id = $banner_oid;
+    my $banner_id = $banner_oid->to_string();
     my $user_id = 'user_id_';
     foreach my $update_couner (1..4){
         my $user_id_iter = $user_id . $update_couner;

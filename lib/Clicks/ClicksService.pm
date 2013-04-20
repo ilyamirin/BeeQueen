@@ -2,9 +2,9 @@ package Clicks::ClicksService;
 
 use strict;
 use warnings;
-use Data::Dump qw(dump);
 use Moo;
 use Impressions::Impression;
+use MongoDB::OID;
 =pod
 =head1 Clicks::ClicksService
 This class will deal with clicks transactions. It will receive information about click action 
@@ -93,7 +93,8 @@ sub __find_url_to_redirect_for_banner(){
 	my ($self, $banner_id) = @_;
 	
     my $banners_collection = $self->database->get_collection(Impressions::Impression::BANNERS_COLLECTION_NAME);
-    my $banner = $banners_collection->find_one({'_id' => $banner_id});
+    my $banner_oid = MongoDB::OID->new('value' => $banner_id);
+    my $banner = $banners_collection->find_one({_id => $banner_oid});
     my $redirect_url = "";
     if($banner){    	
     	$redirect_url = $banner->{'redirect_url'};
