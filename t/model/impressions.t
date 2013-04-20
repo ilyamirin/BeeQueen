@@ -18,9 +18,9 @@ my $test_database = $mongo->get_database('test');
 my $test_utils = TestUtils::TestUtilsMongo->new({'database' => $test_database});
 
 $test_utils->clear_collections();#clear dataset before testing
-my $target_id = 'target_id_1';
 my $target_name = 'target name simple';
-my $target_oid = $test_utils->create_target($target_id, $target_name);
+my $target_oid = $test_utils->create_target($target_name);
+my $target_id = $target_oid->to_string();
 my $random_strategy_name = 'random';
 my $pick_second_strategy_name = 'pick_second';
 
@@ -29,10 +29,10 @@ my $banner_prob = 0.2;
 my $banner_oid = $test_utils->create_banner($target_id, $banner_url, $banner_prob);
 
 #===Data for test with numerious banners===
-my $target_id2 = 'target od 2';
-my $target_name2 = 'target_name 2';
 
-my $target_oid2 = $test_utils->create_target($target_id2, $target_name2);
+my $target_name2 = 'target_name 2';
+my $target_oid2 = $test_utils->create_target($target_name2);
+my $target_id2 = $target_oid2->to_string();
 $test_utils->set_target_banner_strategy($target_id2, $pick_second_strategy_name);
 
 $banner_oid = $test_utils->create_banner($target_id2, $banner_url, $banner_prob);
@@ -40,10 +40,10 @@ my $banner_url2 = 'new url';
 my $banner_oid2 = $test_utils->create_banner($target_id2, $banner_url2, $banner_prob);
 
 #===Data for test with one banner and pick second banner strategy===
-my $target_id3 = 'target od 3';
 my $target_name3 = 'target_name 3';
 
-my $target_oid3 = $test_utils->create_target($target_id3, $target_name3);
+my $target_oid3 = $test_utils->create_target($target_name3);
+my $target_id3 = $target_oid3->to_string();
 $test_utils->set_target_banner_strategy($target_id3, $pick_second_strategy_name);
 
 $banner_oid2 = $test_utils->create_banner($target_id3, $banner_url, $banner_prob);

@@ -38,7 +38,7 @@ use constant BANNERS_COLLECTION_NAME => 'banners';
  	my ($self, $target_id, $user_id) = @_;
  	
  	my $targets_collection = $self->database->get_collection( TARGET_COLLECTION_NAME );#obtain targets collection
- 	my $target = $targets_collection->find_one({'_id' => MongoDB::OID->new($target_id)});
+ 	my $target = $targets_collection->find_one({'_id' => MongoDB::OID->new('value' => $target_id)});
  	
  	my $url = '';
 	if(defined $target){#if we have something in our output, take the doc
@@ -48,7 +48,7 @@ use constant BANNERS_COLLECTION_NAME => 'banners';
     	my $banner = $self->__pick_right_banner(\@banners_list, $banner_pick_strategy, $user_id);
     	if(defined $banner && $banner){
     		$url = $banner->{'url'};
-    		$self->impression_registrar->register_impression_stat($target_id, $banner->{'_id'}, $user_id);
+    		$self->impression_registrar->register_impression_stat($target->{'_id'}, $banner->{'_id'}, $user_id);
     	}
 	} 	
  	return $url;
