@@ -37,7 +37,7 @@ sub test_impression(){
     $t->post_ok( '/impression' => form => 
                                 { 
                                 	target_id => $target_id,
-                                	banner_id => $banner_oid,
+                                	banner_id => $banner_oid->to_string(),
                                 	user_id => 'some_user', 
                                 	
                                 } )
@@ -52,7 +52,7 @@ sub test_click(){
     $t->post_ok( '/click' => form => 
                                 { 
                                 	target_id => $target_id,
-                                	banner_id => $banner_oid,
+                                	banner_id => $banner_oid->to_string(),
                                 	user_id => 'some_user', 
                                 	
                                 } )
