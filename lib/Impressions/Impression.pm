@@ -4,6 +4,7 @@ use strict;
 use warnings;
 
 use Moo;
+use MongoDB::OID;
 
 =pod
 =head1 Impressions::Impression
@@ -37,11 +38,10 @@ use constant BANNERS_COLLECTION_NAME => 'banners';
  	my ($self, $target_id, $user_id) = @_;
  	
  	my $targets_collection = $self->database->get_collection( TARGET_COLLECTION_NAME );#obtain targets collection
- 	my $target_cursor = $targets_collection->find({'target_id' => $target_id});
+ 	my $target = $targets_collection->find_one({'_id' => MongoDB::OID->new($target_id)});
  	
  	my $url = '';
-	if($target_cursor->count > 0){#if we have something in our output, take the doc
-		my $target = $target_cursor->next;
+	if(defined $target){#if we have something in our output, take the doc
 		#get target banners list
 		my @banners_list = $self->__get_banners_list($target);
     	my $banner_pick_strategy = $target->{'banner_strategy'};
