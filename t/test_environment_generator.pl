@@ -30,6 +30,7 @@ my $target_name = 'target name simple';
 my $random_strategy_name = 'random';
 my $target_oid  = $test_utils->create_target($target_name );
 my $target_id   = $target_oid->to_string();
+print "Target ID $target_id\n";
 $test_utils->set_target_banner_strategy($target_id, $random_strategy_name);
 
 foreach my $banners_iter ( 1 .. 25 ) {
