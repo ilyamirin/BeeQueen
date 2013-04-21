@@ -56,12 +56,20 @@ Initialyse application
 	      
 	      my $clicks_service = $self->get_bean('clicks_service');
 	      my $redirect_url = $clicks_service->process_click($target_id, $banner_id, $user_id);
-#	      $self->redirect_to($redirect_url); 
-          $self->render(json => {
-            'redirect_url' => $redirect_url,            
-          });       
+	      $self->redirect_to($redirect_url); 
+#          $self->render(json => {
+#            'redirect_url' => $redirect_url,            
+#          });       
       }    
     });	
+    
+    $r->any('/blankpage'=> sub {
+    	my $self = shift;
+        
+        $self->render('json'=>{
+        	'blank_page' => 'ok',
+        });	
+    });
 }
 
 
