@@ -31,7 +31,6 @@ my $banner_oid = $test_utils->create_banner($target_id, $banner_url, $banner_pro
 
 
 my $t = Test::Mojo->new('BeeQueen');
-$t->ua->max_redirects(10);
 #==================DEFINE TEST========================
 sub test_impression(){
     $t->post_ok( '/impression' => form => 
@@ -50,6 +49,17 @@ sub test_impression(){
 
 sub test_click(){
     $t->post_ok( '/click' => form => 
+                                { 
+                                	target_id => $target_id,
+                                	banner_id => $banner_oid->to_string(),
+                                	user_id => 'some_user', 
+                                	
+                                } )
+   ->status_is(302)    
+  ->header_is( 'X-Powered-By' => 'Mojolicious (Perl)' );
+  
+  $t->ua->max_redirects(10);
+  $t->post_ok( '/click' => form => 
                                 { 
                                 	target_id => $target_id,
                                 	banner_id => $banner_oid->to_string(),
