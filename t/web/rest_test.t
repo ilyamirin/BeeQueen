@@ -26,12 +26,12 @@ $test_utils->set_target_banner_strategy($target_id, $random_strategy_name);
 
 my $banner_url = 'fancy banner url';
 my $banner_prob = 0.2;
-my $redirect_url = 'redirect url';
+my $redirect_url = '/blankpage';
 my $banner_oid = $test_utils->create_banner($target_id, $banner_url, $banner_prob, $redirect_url);
 
 
 my $t = Test::Mojo->new('BeeQueen');
-
+$t->ua->max_redirects(10);
 #==================DEFINE TEST========================
 sub test_impression(){
     $t->post_ok( '/impression' => form => 
@@ -59,7 +59,7 @@ sub test_click(){
    ->status_is(200)
     
   ->header_is( 'X-Powered-By' => 'Mojolicious (Perl)' )
-  ->json_content_is( {'redirect_url' => $redirect_url} );
+  ->json_content_is( {'blank_page' => 'ok'} );
     
 }
 
