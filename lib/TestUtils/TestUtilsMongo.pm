@@ -8,6 +8,7 @@ use MongoDB::OID;
 use Impressions::ImpressionStatistics;
 use Impressions::Impression;
 use Clicks::ClicksService;
+use Events::EventsService;
 =pod
 =head1 TestUtils::TestUtilsMongo
 This module is just set of procedures that can help to create test entities in database
@@ -34,6 +35,8 @@ This module is just set of procedures that can help to create test entities in d
  	$impressions_collection->drop();
  	my $clicks_collection = $self->database->get_collection(Clicks::ClicksService::CLICKS_COLLECTION_NAME);
  	$clicks_collection->drop();
+ 	my $events_collection = $self->database->get_collection(Events::EventsService::EVENTS_COLLECTION_NAME);
+ 	$events_collection->drop();
  	
  }
  
