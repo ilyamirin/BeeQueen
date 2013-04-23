@@ -35,6 +35,8 @@ This module is just set of procedures that can help to create test entities in d
  	$impressions_collection->drop();
  	my $clicks_collection = $self->database->get_collection(Clicks::ClicksService::CLICKS_COLLECTION_NAME);
  	$clicks_collection->drop();
+ 	my $events_desc_collection = $self->database->get_collection(Events::EventsService::EVENTS_DESCRIPTION_COLLECTION_NAME);
+ 	$events_desc_collection->drop();
  	my $events_collection = $self->database->get_collection(Events::EventsService::EVENTS_COLLECTION_NAME);
  	$events_collection->drop();
  	
