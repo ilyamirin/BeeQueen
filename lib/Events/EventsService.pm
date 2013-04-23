@@ -13,7 +13,7 @@ This class only purpose is to register data about event into database
  has 'database' => (is => 'ro',);
  
 use constant EVENTS_COLLECTION_NAME => 'events';
- 
+use constant EVENTS_DESCRIPTION_COLLECTION_NAME => 'events_desciption'; 
 
 #########################################################################
 # Usage      : $status = register_event($event_id, $user_id);
