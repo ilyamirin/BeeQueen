@@ -43,7 +43,7 @@ This module is just set of procedures that can help to create test entities in d
  }
  
 ############################################
-# Usage      : $test_utils->create_target($target_id, $target_name)
+# Usage      : $target_oid = $test_utils->create_target($target_name)
 # Purpose    : Crates target in mongo db with given id and name
 # Returns    : target OID
 # Parameters : target id - id of target as a sting, target name - label of this target 
@@ -52,14 +52,14 @@ This module is just set of procedures that can help to create test entities in d
 # See Also   : n/a
  sub create_target(){
  	my ($self, $target_name) = @_;
- 	my $targets_collection = $self->database->get_collection('targets');
+ 	my $targets_collection = $self->database->get_collection(Impressions::Impression::TARGET_COLLECTION_NAME);
  	my $target_oid = $targets_collection
  						->save({'target_name' => $target_name });
  	return $target_oid;
  }
 
 ############################################
-# Usage      : $test_utils->create_banner($target_id, $banner_url, $banner_prob)
+# Usage      : $test_utils->create_banner($target_id, $banner_url, $banner_prob, $redirect_url)
 # Purpose    : Creates banner in database and adds it to a given target
 # Returns    : banner OID
 # Parameters : target id - id of target as a sting, 
@@ -71,14 +71,14 @@ This module is just set of procedures that can help to create test entities in d
 # See Also   : n/a
 sub create_banner(){
 	my ($self, $target_id, $banner_url, $banner_prob, $redirect_url) = @_;
- 	my $banners_collection = $self->database->get_collection('banners');
+ 	my $banners_collection = $self->database->get_collection(Impressions::Impression::BANNERS_COLLECTION_NAME);
  	my $banner_oid = $banners_collection
  					->insert({ 'url' => $banner_url, 
  						'prob' => $banner_prob,
  						'redirect_url' => $redirect_url
  						 });
  	print "Banner oid: $banner_oid\n";
- 	my $targets_collection = $self->database->get_collection('targets');
+ 	my $targets_collection = $self->database->get_collection(Impressions::Impression::TARGET_COLLECTION_NAME);
  	$targets_collection->update({'_id' => MongoDB::OID->new('value' => $target_id)}, 
  								{'$push' => {'banners' => $banner_oid}});
  	return $banner_oid;
@@ -96,9 +96,26 @@ sub create_banner(){
 sub set_target_banner_strategy(){
 	my ($self, $target_id, $strategy_name) = @_;
 	
-	my $targets_collection = $self->database->get_collection('targets');
+	my $targets_collection = $self->database->get_collection(Impressions::Impression::TARGET_COLLECTION_NAME);
     $targets_collection->update({'_id' => MongoDB::OID->new('value' => $target_id)}, 
                                 {'$set' => {'banner_strategy' => $strategy_name}});
+}
+
+############################################
+# Usage      : $event_description_oid = $test_utils->create_event_description($event_name)
+# Purpose    : Create event description object for test purposes from this object we need only 
+#              oid
+# Returns    : none
+# Parameters : event_name - fake name for event, used just to put something miningful in database 
+# Throws     : no exceptions
+# Comments   : ???
+# See Also   : n/a
+sub create_event_description(){
+	my ($self, $event_name) = @_;
+    my $events_descriptions_collection = $self->database->get_collection(Events::EventsService::EVENTS_DESCRIPTION_COLLECTION_NAME);
+    my $event_description_oid = $events_descriptions_collection
+                        ->save({'name' => $event_name });
+    return $event_description_oid;
 }
 
 1;
