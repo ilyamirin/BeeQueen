@@ -29,6 +29,9 @@ my $banner_prob = 0.2;
 my $redirect_url = '/blankpage';
 my $banner_oid = $test_utils->create_banner($target_id, $banner_url, $banner_prob, $redirect_url);
 
+my $event_name = "fancy event _name";
+my $event_oid = $test_utils->create_event_description($event_name);
+my $event_id = $event_oid->to_string();
 
 my $t = Test::Mojo->new('BeeQueen');
 #==================DEFINE TEST========================
@@ -73,9 +76,23 @@ sub test_click(){
     
 }
 
+sub test_event(){
+	$t->post_ok( '/event' => form => 
+                                { 
+                                    event_id => $event_id,
+                                    banner_id => $banner_oid->to_string(),
+                                    user_id => 'some_user', 
+                                    
+                                } )
+   ->status_is(200)
+    
+  ->header_is( 'X-Powered-By' => 'Mojolicious (Perl)' )
+  ->json_content_is( {'status' => 'ok'} );
+}
 #==================RUN TEST========================
 test_impression();
 test_click();
+test_event();
 $test_utils->clear_collections();#clear dataset after testing
 
 
