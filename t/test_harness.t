@@ -18,11 +18,11 @@ my %args = (
  
  
  my @tests = (
- $harness_working_directory . '/model/impressions.t', 
- $harness_working_directory . '/model/impression_statistics.t', 
- $harness_working_directory . '/model/clicks_service.t',
- $harness_working_directory . '/model/events_service.t',
- $harness_working_directory . '/web/rest_test.t'
+    $harness_working_directory . '/model/impressions.t', 
+    $harness_working_directory . '/model/impression_statistics.t', 
+    $harness_working_directory . '/model/clicks_service.t',
+    $harness_working_directory . '/model/events_service.t',
+    $harness_working_directory . '/web/rest_test.t'
  );
  $harness->runtests(@tests);
  
