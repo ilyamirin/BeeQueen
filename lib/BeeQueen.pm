@@ -57,9 +57,23 @@ Initialyse application
 	      my $clicks_service = $self->get_bean('clicks_service');
 	      my $redirect_url = $clicks_service->process_click($target_id, $banner_id, $user_id);
 	      $self->redirect_to($redirect_url); 
-#          $self->render(json => {
-#            'redirect_url' => $redirect_url,            
-#          });       
+      }    
+    });	
+     
+     $r->any('/event' => sub {
+      my $self = shift;
+      
+      my $event_id = $self->param('event_id');
+      if($event_id){
+	      my $banner_id = $self->param('banner_id') || '';
+	      my $user_id = $self->param('user_id') || '';
+	      
+	      my $events_service = $self->get_bean('events_service');
+	      my $status = $events_service->register_event($event_id, $banner_id, $user_id);
+	      my $status_lit = $status ? 'ok' : 'error'; 
+          $self->render(json => {
+            'status' => $status_lit,            
+          });       
       }    
     });	
     
