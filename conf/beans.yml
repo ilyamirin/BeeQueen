@@ -27,3 +27,7 @@ clicks_service:
     class: 'Clicks::ClicksService'
     args:
         database: {ref: 'test_database'}
+events_service:
+    class: 'Events::EventsService'
+    args:
+        database: {ref: 'test_database'}
