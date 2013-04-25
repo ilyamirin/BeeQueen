@@ -15,7 +15,7 @@ in database.
 
 use constant TARGET_COLLECTION_NAME => 'targets';
 use constant BANNERS_COLLECTION_NAME => 'banners';
-
+use constant TARTGET_BUNDLE_COLLECTION_NAME => 'target_bundles';
 
  #database handler
  has 'database' => (is => 'ro',);
