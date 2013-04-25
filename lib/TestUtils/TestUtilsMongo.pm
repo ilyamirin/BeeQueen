@@ -29,6 +29,8 @@ This module is just set of procedures that can help to create test entities in d
  	my ($self) = @_;
  	my $targets_collection = $self->database->get_collection(Impressions::Impression::TARGET_COLLECTION_NAME);
  	$targets_collection->drop();
+ 	my $targets_bundles_collection = $self->database->get_collection(Impressions::Impression::TARGET_COLLECTION_NAME);
+ 	$targets_bundles_collection->drop();
  	my $banners_collection = $self->database->get_collection(Impressions::Impression::BANNERS_COLLECTION_NAME);
  	$banners_collection->drop();
  	my $impressions_collection = $self->database->get_collection(Impressions::ImpressionStatistics::IMPR_STAT_NAME_COLLECTION_NAME);
@@ -44,9 +46,9 @@ This module is just set of procedures that can help to create test entities in d
  
 ############################################
 # Usage      : $target_oid = $test_utils->create_target($target_name)
-# Purpose    : Crates target in mongo db with given id and name
+# Purpose    : Crates target in mongo db with given name
 # Returns    : target OID
-# Parameters : target id - id of target as a sting, target name - label of this target 
+# Parameters : target name - label of this target 
 # Throws     : no exceptions
 # Comments   : ???
 # See Also   : n/a
@@ -56,6 +58,41 @@ This module is just set of procedures that can help to create test entities in d
  	my $target_oid = $targets_collection
  						->save({'target_name' => $target_name });
  	return $target_oid;
+ }
+
+############################################
+# Usage      : $bundle_oid = $test_utils->create_target_bundle($bundle_name)
+# Purpose    : Crates description for targets bundle in a mongo db with given name
+# Returns    : bundle OID
+# Parameters : bundle name - label of this targts bundle 
+# Throws     : no exceptions
+# Comments   : ???
+# See Also   : n/a 
+ sub create_target_bundle(){
+ 	my ($self, $target_bundle_name) = @_;
+    my $targets_collection = $self->database->get_collection(Impressions::Impression::TARTGET_BUNDLE_COLLECTION_NAME);
+    my $bundle_oid = $targets_collection
+                        ->save({'name' => $target_bundle_name });
+    return $bundle_oid;
+ }
+
+ ############################################
+# Usage      : $test_utils->tie_targets_to_bundle($targets_bundle_oid, \@targets_oids)
+# Purpose    : Tie targets to target bundle by setting property
+# Returns    : none
+# Parameters : MongoDB::OID targets bundle oid, 
+#               array reference to targets oids - reference to an array of targets bundles 
+# Throws     : no exceptions
+# Comments   : ???
+# See Also   : n/a
+ sub tie_targets_to_bundle(){
+ 	my ($self, $bundle_oid, $targets_aref) = @_;
+ 	my $targets_collection = $self->database->get_collection(Impressions::Impression::TARGET_COLLECTION_NAME);
+    my $status = $targets_collection->update({'_id' => {'$in' => $targets_aref} }, 
+                                {
+                                	'$push' => {'bundles' => $bundle_oid}
+                                });
+    return $status;                            
  }
 
 ############################################
