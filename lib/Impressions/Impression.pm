@@ -54,6 +54,35 @@ use constant BANNERS_COLLECTION_NAME => 'banners';
  	return $url;
  }
 
+
+############################################
+# Usage      : $bundle_banners = get_bundle_banners($target_bundle_id, $user_id);
+# Purpose    : get banner information fot full bundle of targets
+# Returns    : Hash {target_id => banner_info}
+# Parameters : target_bundle_id - id of target bundle to get banners info for
+#              user_id - id of an user, this is optional parameter and can
+#              be ommited in some cercumstancess
+# Throws     : no exceptions
+# Comments   : ???
+# See Also   : n/a
+sub get_bundle_banners(){
+    my ($self, $targets_bundle_id, $user_id) = @_;
+    
+    my $targets_collection = $self->database->get_collection(TARGET_COLLECTION_NAME );#obtain targets collection
+    my $targets_cursor = $targets_collection->find({
+        'target_bundles' => MongoDB::OID->new('value' => $targets_bundle_id)});
+    my %targets_banners_map = ();
+    while(my $target = $targets_cursor->next ){
+        my $target_oid = $target->{'_id'};
+        my $target_id = $target_oid->to_string();
+        my $banner_info = $self->get_banner_url($target_id, $user_id);
+        $targets_banners_map{$target_id} = $banner_info;
+    }
+    
+    return %targets_banners_map;
+} 
+
+
 ############################################
 # Usage      : $url = __get_banners_list($target_hash_ref);
 # Purpose    : get bunner list for given target
