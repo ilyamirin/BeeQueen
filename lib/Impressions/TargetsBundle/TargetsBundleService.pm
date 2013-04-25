@@ -35,13 +35,15 @@ sub get_bundle_banners(){
 	my $targets_collection = $self->database->get_collection( Impressions::Impression::TARGET_COLLECTION_NAME );#obtain targets collection
     my $targets_cursor = $targets_collection->find({
     	'target_bundles' => MongoDB::OID->new('value' => $targets_bundle_id)});
-    
+    my %targets_banners_map = ();
     while(my $target = $targets_cursor->next ){
     	my $target_oid = $target->{'_id'};
     	my $target_id = $target_oid->to_string();
     	my $banner_info = $self->impression_service->get_banner_url($target_id, $user_id);
+    	$targets_banners_map{$target_id} = $banner_info;
     }
-   
+    
+    return %targets_banners_map;
 } 
 
 1;
