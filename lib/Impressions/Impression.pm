@@ -40,17 +40,7 @@ use constant BANNERS_COLLECTION_NAME => 'banners';
  	my $targets_collection = $self->database->get_collection( TARGET_COLLECTION_NAME );#obtain targets collection
  	my $target = $targets_collection->find_one({'_id' => MongoDB::OID->new('value' => $target_id)});
  	
- 	my $url = '';
-	if(defined $target){#if we have something in our output, take the doc
-		#get target banners list
-		my @banners_list = $self->__get_banners_list($target);
-    	my $banner_pick_strategy = $target->{'banner_strategy'};
-    	my $banner = $self->__pick_right_banner(\@banners_list, $banner_pick_strategy, $user_id);
-    	if(defined $banner && $banner){
-    		$url = $banner->{'url'};
-    		$self->impression_registrar->register_impression_stat($target->{'_id'}, $banner->{'_id'}, $user_id);
-    	}
-	} 	
+ 	my $url = $self->__get_bunner_for_target($target, $user_id);
  	return $url;
  }
 
@@ -73,15 +63,28 @@ sub get_bundle_banners(){
         'target_bundles' => MongoDB::OID->new('value' => $targets_bundle_id)});
     my %targets_banners_map = ();
     while(my $target = $targets_cursor->next ){
-        my $target_oid = $target->{'_id'};
-        my $target_id = $target_oid->to_string();
-        my $banner_info = $self->get_banner_url($target_id, $user_id);
-        $targets_banners_map{$target_id} = $banner_info;
+        $targets_banners_map{$target-{'_id'}->to_string()} = 
+                    $self->__get_bunner_for_target($target, $user_id);
     }
     
     return %targets_banners_map;
 } 
 
+sub __get_bunner_for_target(){
+	my ($self, $target, $user_id) = @_;
+	my $url = '';
+	if(defined $target){#if we have something in our output, take the doc
+        #get target banners list
+        my @banners_list = $self->__get_banners_list($target);
+        my $banner_pick_strategy = $target->{'banner_strategy'};
+        my $banner = $self->__pick_right_banner(\@banners_list, $banner_pick_strategy, $user_id);
+        if(defined $banner && $banner){
+            $url = $banner->{'url'};
+            $self->impression_registrar->register_impression_stat($target->{'_id'}, $banner->{'_id'}, $user_id);
+        }
+    } 
+    return $url;  
+}
 
 ############################################
 # Usage      : $url = __get_banners_list($target_hash_ref);
