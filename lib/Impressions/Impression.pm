@@ -63,7 +63,7 @@ sub get_bundle_banners(){
         'target_bundles' => MongoDB::OID->new('value' => $targets_bundle_id)});
     my %targets_banners_map = ();
     while(my $target = $targets_cursor->next ){
-        $targets_banners_map{$target-{'_id'}->to_string()} = 
+        $targets_banners_map{$target->{'_id'}->to_string()} = 
                     $self->__get_bunner_for_target($target, $user_id);
     }
     
