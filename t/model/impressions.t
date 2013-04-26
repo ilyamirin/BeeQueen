@@ -28,6 +28,7 @@ my $banner_url = 'fancy banner url';
 my $banner_prob = 0.2;
 my $banner_oid = $test_utils->create_banner($target_id, $banner_url, $banner_prob);
 
+my $user_id = 'some user id';
 #===Data for test with numerious banners===
 
 my $target_name2 = 'target_name 2';
@@ -51,6 +52,11 @@ $banner_oid2 = $test_utils->create_banner($target_id3, $banner_url, $banner_prob
 
 my $impression_statistics = my $mock = Test::MockObject->new();
 $impression_statistics->set_true( 'register_impression_stat' );
+#=====Targets bundle==============
+my $targets_bundle_oid = $test_utils->create_target_bundle('bundle name');
+my @targets_oids = ($target_oid, $target_oid2, $target_oid3);
+$test_utils->tie_targets_to_bundle($targets_bundle_oid, \@targets_oids);
+
 #==================DEFINE TEST========================
 #if strategy is not set, pick first one banner and go on
 sub test_without_strategies(){
@@ -92,9 +98,24 @@ sub test_pick_no_banners_case(){
     ok($returned_url eq '', 'Return empty string if banner can not be found');
 }
 
+sub test_targets_bundle(){
+	my $impression_obj = Impressions::Impression->new({
+                    'database' => $test_database,
+                    'banners_strategies' => {
+                        $random_strategy_name => Impressions::BannersStrategies::PickSecondStrategy->new(),
+                        $pick_second_strategy_name => Impressions::BannersStrategies::PickSecondStrategy->new(),
+                    },
+                    'impression_registrar' => $impression_statistics,
+                }); 
+     my %bundle_banners = $impression_obj->get_bundle_banners($targets_bundle_oid->to_string(),
+                                                              $user_id);
+     ok(3 == scalar keys %bundle_banners, 'Count of banners in bundle');
+                                                              
+}
 #==================RUN TEST========================
 test_without_strategies();
 test_with_pick_second_strategy_and_many_banners();
 test_pick_no_banners_case();
+test_targets_bundle();
 
 $test_utils->clear_collections();#clear dataset after testing
