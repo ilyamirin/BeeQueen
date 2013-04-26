@@ -90,7 +90,7 @@ This module is just set of procedures that can help to create test entities in d
  	my $targets_collection = $self->database->get_collection(Impressions::Impression::TARGET_COLLECTION_NAME);
     my $status = $targets_collection->update({'_id' => {'$in' => $targets_aref} }, 
                                 {
-                                	'$push' => {'bundles' => $bundle_oid}
+                                	'$push' => {'target_bundles' => $bundle_oid}
                                 });
     return $status;                            
  }
