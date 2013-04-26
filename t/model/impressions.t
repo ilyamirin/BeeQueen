@@ -54,7 +54,7 @@ my $impression_statistics = my $mock = Test::MockObject->new();
 $impression_statistics->set_true( 'register_impression_stat' );
 #=====Targets bundle==============
 my $targets_bundle_oid = $test_utils->create_target_bundle('bundle name');
-my @targets_oids = ($target_oid, $target_oid2, $target_oid3);
+my @targets_oids = ($target_oid2, $target_oid2, $target_oid2);
 $test_utils->tie_targets_to_bundle($targets_bundle_oid, \@targets_oids);
 
 #==================DEFINE TEST========================
@@ -109,7 +109,8 @@ sub test_targets_bundle(){
                 }); 
      my %bundle_banners = $impression_obj->get_bundle_banners($targets_bundle_oid->to_string(),
                                                               $user_id);
-     ok(3 == scalar keys %bundle_banners, 'Count of banners in bundle');
+     ok(1 == scalar keys %bundle_banners, 'Count of banners in bundle');
+     ok($banner_url2 eq $bundle_banners{$target_id2}, 'Url from output is the same');
                                                               
 }
 #==================RUN TEST========================
