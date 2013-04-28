@@ -65,7 +65,7 @@ sub test_impression_bundle(){
    ->status_is(200)
     
   ->header_is( 'X-Powered-By' => 'Mojolicious (Perl)' )
-  ->json_content_is( {'url' => $banner_url} );
+  ->json_content_is( {$target_id => $banner_url} );
 }
 
 sub test_click(){
