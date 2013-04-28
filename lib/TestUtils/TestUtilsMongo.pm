@@ -29,7 +29,7 @@ This module is just set of procedures that can help to create test entities in d
  	my ($self) = @_;
  	my $targets_collection = $self->database->get_collection(Impressions::Impression::TARGET_COLLECTION_NAME);
  	$targets_collection->drop();
- 	my $targets_bundles_collection = $self->database->get_collection(Impressions::Impression::TARGET_COLLECTION_NAME);
+ 	my $targets_bundles_collection = $self->database->get_collection(Impressions::Impression::TARTGET_BUNDLE_COLLECTION_NAME);
  	$targets_bundles_collection->drop();
  	my $banners_collection = $self->database->get_collection(Impressions::Impression::BANNERS_COLLECTION_NAME);
  	$banners_collection->drop();
