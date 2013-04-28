@@ -109,6 +109,7 @@ sub test_event(){
 }
 #==================RUN TEST========================
 test_impression();
+test_impression_bundle();
 test_click();
 test_event();
 $test_utils->clear_collections();#clear dataset after testing
