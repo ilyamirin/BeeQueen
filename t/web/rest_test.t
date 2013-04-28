@@ -58,7 +58,7 @@ sub test_impression(){
 sub test_impression_bundle(){
 	$t->post_ok( '/impression/bundle' => form => 
                                 { 
-                                    bundle_id => $target_id,                                    
+                                    bundle_id => $targets_bundle_oid->to_string(),                                    
                                     user_id => 'some_user', 
                                     
                                 } )
