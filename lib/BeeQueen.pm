@@ -53,8 +53,8 @@ Initialyse application
       my $user_id = $self->param('user_id') || '';
       
       my $impression_service = $self->get_bean('impression_service');
-      my $bundle_data = $impression_service->get_bundle_banners($bundle_id, $user_id);
-      $self->render(json => $bundle_data);      
+      my %bundle_data = $impression_service->get_bundle_banners($bundle_id, $user_id);
+      $self->render(json => \%bundle_data);      
     });	
      
      $r->any('/click' => sub {
