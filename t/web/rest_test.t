@@ -33,12 +33,14 @@ my $event_name = "fancy event _name";
 my $event_oid = $test_utils->create_event_description($event_name);
 my $event_id = $event_oid->to_string();
 
-my $t = Test::Mojo->new('BeeQueen');
 #=====Targets bundle==============
 my $targets_bundle_oid = $test_utils->create_target_bundle('bundle name');
-my @targets_oids = ($target_oid, $target_oid, $target_oid);
+my @targets_oids = ($target_oid);
 $test_utils->tie_targets_to_bundle($targets_bundle_oid, \@targets_oids);
 
+
+
+my $t = Test::Mojo->new('BeeQueen');
 
 #==================DEFINE TEST========================
 sub test_impression(){
