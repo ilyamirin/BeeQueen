@@ -40,7 +40,7 @@ Initialyse application
       my $user_id = $self->param('user_id') || '';
       
       my $impression_service = $self->get_bean('impression_service');
-      my %banner_info = $impression_service->get_banner_url($target_id, $user_id);
+      my %banner_info = $impression_service->get_banner($target_id, $user_id);
       $self->render(json => \%banner_info );      
     });	
      
