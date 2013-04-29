@@ -40,10 +40,8 @@ Initialyse application
       my $user_id = $self->param('user_id') || '';
       
       my $impression_service = $self->get_bean('impression_service');
-      my $target_url = $impression_service->get_banner_url($target_id, $user_id);
-      $self->render(json => {
-      	url => $target_url, 
-      });      
+      my %banner_info = $impression_service->get_banner_url($target_id, $user_id);
+      $self->render(json => \%banner_info );      
     });	
      
      $r->any('/impression/bundle' => sub {
