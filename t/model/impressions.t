@@ -65,8 +65,10 @@ sub test_without_strategies(){
                     'banners_strategies' => {},
                     'impression_registrar' => $impression_statistics,
                 }); 
-	my $returned_url = $impression_obj->get_banner_url($target_id);	
-	ok($returned_url eq $banner_url, 'Pick first one target banner if no strategy was not set');	    	
+	my %banner_info = $impression_obj->get_banner($target_id, $user_id);
+	ok(scalar (keys %banner_info) == 2, 'Count of elements in banners info');	
+	ok($banner_info{'url'} eq $banner_url, 'Pick first one target banner if no strategy was not set');	    	
+	ok($banner_info{'id'} eq $banner_oid->to_string(), 'Banner id is the same');	    	
 }
 
 
@@ -80,8 +82,11 @@ sub test_with_pick_second_strategy_and_many_banners(){
                     },
                     'impression_registrar' => $impression_statistics,
                 }); 
-    my $returned_url = $impression_obj->get_banner_url($target_id2); 
-    ok($returned_url eq $banner_url2, 'Pick second banner banner with pick_second_banner strategy');
+    
+    my %banner_info = $impression_obj->get_banner($target_id2, $user_id);
+    ok(scalar (keys %banner_info) == 2, 'Count of elements in banners info');   
+    ok($banner_info{'url'} eq $banner_url2,  'Pick second banner banner with pick_second_banner strategy');          
+    ok($banner_info{'id'} eq $banner_oid2->to_string(), 'Banner id is the same');
 }
 
 #case when strategy can-not pick one banner
@@ -94,8 +99,10 @@ sub test_pick_no_banners_case(){
                     },
                     'impression_registrar' => $impression_statistics,
                 }); 
-    my $returned_url = $impression_obj->get_banner_url($target_id3); 
-    ok($returned_url eq '', 'Return empty string if banner can not be found');
+    
+    my %banner_info = $impression_obj->get_banner($target_id3, $user_id); 
+    
+    ok(scalar (keys %banner_info) == 0, 'Count of elements in banners info');
 }
 
 sub test_targets_bundle(){
