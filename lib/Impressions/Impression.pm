@@ -27,21 +27,21 @@ use constant TARTGET_BUNDLE_COLLECTION_NAME => 'target_bundles';
 ############################################
 # Usage      : $url = get_banner('target_12', 'some_user_id');
 # Purpose    : get bunner url depending on target and users ids and database
-# Returns    : banner url
+# Returns    : hash {'url' => 'banner_url', 'banner_id' => 'banner_id'}
 # Parameters : target_id - id of target ot get url for
 #			   user_id - id of an user, this is optional parameter and can
 #			   be ommited in some cercumstancess
 # Throws     : no exceptions
 # Comments   : ???
 # See Also   : n/a
- sub get_banner_url(){
+ sub get_banner(){
  	my ($self, $target_id, $user_id) = @_;
  	
  	my $targets_collection = $self->database->get_collection( TARGET_COLLECTION_NAME );#obtain targets collection
  	my $target = $targets_collection->find_one({'_id' => MongoDB::OID->new('value' => $target_id)});
  	
- 	my $url = $self->__get_bunner_for_target($target, $user_id);
- 	return $url;
+ 	my %banners_info = $self->__get_bunner_for_target($target, $user_id);
+ 	return %banners_info;
  }
 
 
@@ -63,27 +63,38 @@ sub get_bundle_banners(){
         'target_bundles' => MongoDB::OID->new('value' => $targets_bundle_id)});
     my %targets_banners_map = ();
     while(my $target = $targets_cursor->next ){
-        $targets_banners_map{$target->{'_id'}->to_string()} = 
-                    $self->__get_bunner_for_target($target, $user_id);
+    	my %banners_info = $self->__get_bunner_for_target($target, $user_id); 
+        $targets_banners_map{$target->{'_id'}->to_string()} = \%banners_info;                    
     }
     
     return %targets_banners_map;
 } 
 
+############################################
+# Usage      : $bundle_banners = __get_bunner_for_target($target_id, $user_id);
+# Purpose    : get banner information for one trget and banner
+# Returns    : Hash {url => 'banner url', 'id' => 'banner id'}
+# Parameters : target_id - id of target to get banners info for
+#              user_id - id of an user, this is optional parameter and can
+#              be ommited in some cercumstancess
+# Throws     : no exceptions
+# Comments   : ???
 sub __get_bunner_for_target(){
 	my ($self, $target, $user_id) = @_;
-	my $url = '';
+	my %banner_info = ();
 	if(defined $target){#if we have something in our output, take the doc
         #get target banners list
         my @banners_list = $self->__get_banners_list($target);
         my $banner_pick_strategy = $target->{'banner_strategy'};
         my $banner = $self->__pick_right_banner(\@banners_list, $banner_pick_strategy, $user_id);
+        
         if(defined $banner && $banner){
-            $url = $banner->{'url'};
+            $banner_info{'url'} = $banner->{'url'};
+            $banner_info{'id'} = $banner->{'_id'}->to_string();
             $self->impression_registrar->register_impression_stat($target->{'_id'}, $banner->{'_id'}, $user_id);
         }
     } 
-    return $url;  
+    return %banner_info;  
 }
 
 ############################################
