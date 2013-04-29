@@ -36,7 +36,7 @@ my $target_oid2 = $test_utils->create_target($target_name2);
 my $target_id2 = $target_oid2->to_string();
 $test_utils->set_target_banner_strategy($target_id2, $pick_second_strategy_name);
 
-$banner_oid = $test_utils->create_banner($target_id2, $banner_url, $banner_prob);
+my $banner_oid2_1 = $test_utils->create_banner($target_id2, $banner_url, $banner_prob);
 my $banner_url2 = 'new url';
 my $banner_oid2 = $test_utils->create_banner($target_id2, $banner_url2, $banner_prob);
 
@@ -47,7 +47,7 @@ my $target_oid3 = $test_utils->create_target($target_name3);
 my $target_id3 = $target_oid3->to_string();
 $test_utils->set_target_banner_strategy($target_id3, $pick_second_strategy_name);
 
-$banner_oid2 = $test_utils->create_banner($target_id3, $banner_url, $banner_prob);
+my $banner_oid3 = $test_utils->create_banner($target_id3, $banner_url, $banner_prob);
 
 
 my $impression_statistics = my $mock = Test::MockObject->new();
@@ -117,7 +117,8 @@ sub test_targets_bundle(){
      my %bundle_banners = $impression_obj->get_bundle_banners($targets_bundle_oid->to_string(),
                                                               $user_id);
      ok(1 == scalar keys %bundle_banners, 'Count of banners in bundle');
-     ok($banner_url2 eq $bundle_banners{$target_id2}, 'Url from output is the same');
+     ok($bundle_banners{$target_id2}->{'url'} eq $banner_url2, 'Url from output is the same');
+     ok($bundle_banners{$target_id2}->{'id'} eq $banner_oid2->to_string(), 'banner id is the same');
                                                               
 }
 #==================RUN TEST========================
