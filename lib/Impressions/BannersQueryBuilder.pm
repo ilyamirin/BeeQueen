@@ -68,7 +68,7 @@ sub clear_builder(){
 sub set_target_banners(){
 	my ($self, $target_banners) = @_;
 	
-	$self->set_target_banners_oids($target_banners);
+	$self->_set_target_banners_oids($target_banners);
 	
 	return $self;
 }
