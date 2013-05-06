@@ -10,6 +10,7 @@ use MongoDB::MongoClient;
 use MongoDB::OID;
 use TestUtils::TestUtilsMongo;
 use Impressions::BannersStrategies::PickSecondStrategy;
+use Impressions::BannersQueryBuilder;
 
 my $mongo = MongoDB::MongoClient->new;
 my $test_database = $mongo->get_database('test');
@@ -56,6 +57,7 @@ $impression_statistics->set_true( 'register_impression_stat' );
 my $targets_bundle_oid = $test_utils->create_target_bundle('bundle name');
 my @targets_oids = ($target_oid2, $target_oid2, $target_oid2);
 $test_utils->tie_targets_to_bundle($targets_bundle_oid, \@targets_oids);
+#
 
 #==================DEFINE TEST========================
 #if strategy is not set, pick first one banner and go on
@@ -64,6 +66,7 @@ sub test_without_strategies(){
                     'database' => $test_database,
                     'banners_strategies' => {},
                     'impression_registrar' => $impression_statistics,
+                    'banners_query_builder' => Impressions::BannersQueryBuilder->new,
                 }); 
 	my %banner_info = $impression_obj->get_banner($target_id, $user_id);
 	ok(scalar (keys %banner_info) == 2, 'Count of elements in banners info');	
@@ -81,6 +84,7 @@ sub test_with_pick_second_strategy_and_many_banners(){
                     	$pick_second_strategy_name => Impressions::BannersStrategies::PickSecondStrategy->new(),
                     },
                     'impression_registrar' => $impression_statistics,
+                    'banners_query_builder' => Impressions::BannersQueryBuilder->new,
                 }); 
     
     my %banner_info = $impression_obj->get_banner($target_id2, $user_id);
@@ -98,6 +102,7 @@ sub test_pick_no_banners_case(){
                         $pick_second_strategy_name => Impressions::BannersStrategies::PickSecondStrategy->new(),
                     },
                     'impression_registrar' => $impression_statistics,
+                    'banners_query_builder' => Impressions::BannersQueryBuilder->new,
                 }); 
     
     my %banner_info = $impression_obj->get_banner($target_id3, $user_id); 
@@ -113,6 +118,7 @@ sub test_targets_bundle(){
                         $pick_second_strategy_name => Impressions::BannersStrategies::PickSecondStrategy->new(),
                     },
                     'impression_registrar' => $impression_statistics,
+                    'banners_query_builder' => Impressions::BannersQueryBuilder->new,
                 }); 
      my %bundle_banners = $impression_obj->get_bundle_banners($targets_bundle_oid->to_string(),
                                                               $user_id);
