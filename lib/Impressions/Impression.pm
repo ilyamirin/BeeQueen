@@ -24,6 +24,7 @@ use constant TARTGET_BUNDLE_COLLECTION_NAME => 'target_bundles';
  #service to register impression statistics
  has 'impression_registrar' => (is => 'ro');
  #query builder
+ has 'banners_query_builder' => (is => 'ro');
  
 ############################################
 # Usage      : $url = get_banner('target_12', 'some_user_id', \%auxiliary_parameters);
@@ -43,7 +44,7 @@ use constant TARTGET_BUNDLE_COLLECTION_NAME => 'target_bundles';
  	my $targets_collection = $self->database->get_collection( TARGET_COLLECTION_NAME );#obtain targets collection
  	my $target = $targets_collection->find_one({'_id' => MongoDB::OID->new('value' => $target_id)});
  	
- 	my %banners_info = $self->__get_bunner_for_target($target, $user_id);
+ 	my %banners_info = $self->__get_bunner_for_target($target, $user_id, $auxiliary_parameters);
  	return %banners_info;
  }
 
@@ -74,20 +75,22 @@ sub get_bundle_banners(){
 } 
 
 ############################################
-# Usage      : $bundle_banners = __get_bunner_for_target($target_id, $user_id);
+# Usage      : $bundle_banners = __get_bunner_for_target($target_id, $user_id, \%aux_params);
 # Purpose    : get banner information for one trget and banner
 # Returns    : Hash {url => 'banner url', 'id' => 'banner id'}
 # Parameters : target_id - id of target to get banners info for
 #              user_id - id of an user, this is optional parameter and can
 #              be ommited in some cercumstancess
+#              auxiliary parameters - hash reference for unnecessary parameters that can be used 
+#              in banners selection process. E.g. geobinding
 # Throws     : no exceptions
 # Comments   : ???
 sub __get_bunner_for_target(){
-	my ($self, $target, $user_id) = @_;
+	my ($self, $target, $user_id, $auxiliary_parameters) = @_;
 	my %banner_info = ();
 	if(defined $target){#if we have something in our output, take the doc
         #get target banners list
-        my @banners_list = $self->__get_banners_list($target);
+        my @banners_list = $self->__get_banners_list($target, $auxiliary_parameters);
         my $banner_pick_strategy = $target->{'banner_strategy'};
         my $banner = $self->__pick_right_banner(\@banners_list, $banner_pick_strategy, $user_id);
         
@@ -105,14 +108,18 @@ sub __get_bunner_for_target(){
 # Purpose    : get bunner list for given target
 # Returns    : banners list
 # Parameters : target - hash reference that contains element with key 'banners' 
+#              auxiliary parameters - hash reference for unnecessary parameters that can be used 
+#              in banners selection process. E.g. geobinding
 # Throws     : no exceptions
 # Comments   : ???
 # See Also   : get_banner function
  sub __get_banners_list(){
- 	my ($self, $target) = @_;
+ 	my ($self, $target, $auxiliary_parameters) = @_;
  	my @banners = ();
  	if(exists($target->{'banners'})){
-	 	my $banners_query = { '_id' => { '$in' => $target->{ 'banners' } } };
+	 	my $banners_query = $self->banners_query_builder->clear_builder()
+	 	                           ->set_target_banners($target->{ 'banners' })
+	 	                           ->build();
 		my $banners_collection = $self->database->get_collection(BANNERS_COLLECTION_NAME);
 	    @banners = $banners_collection->find( $banners_query )->all();
  	}
