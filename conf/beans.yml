@@ -13,7 +13,9 @@ impression_registrar:
     args:
         database: {ref: 'test_database'}
 random_strategy: 
-    class: 'Impressions::BannersStrategies::RandomStrategy'                    
+    class: 'Impressions::BannersStrategies::RandomStrategy'     
+banners_query_builder:
+    class: 'Impressions::BannersQueryBuilder'               
 impression_service:
     class: 'Impressions::Impression'
     args:
@@ -23,6 +25,7 @@ impression_service:
                 random:  {ref : 'random_strategy'}
             }
         impression_registrar: {ref: 'impression_registrar'}
+        banners_query_builder: {ref: 'banners_query_builder'}
 clicks_service:
     class: 'Clicks::ClicksService'
     args:
