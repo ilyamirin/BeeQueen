@@ -23,19 +23,22 @@ use constant TARTGET_BUNDLE_COLLECTION_NAME => 'target_bundles';
  has 'banners_strategies' => (is => 'ro');
  #service to register impression statistics
  has 'impression_registrar' => (is => 'ro');
+ #query builder
  
 ############################################
-# Usage      : $url = get_banner('target_12', 'some_user_id');
+# Usage      : $url = get_banner('target_12', 'some_user_id', \%auxiliary_parameters);
 # Purpose    : get bunner url depending on target and users ids and database
 # Returns    : hash {'url' => 'banner_url', 'banner_id' => 'banner_id'}
 # Parameters : target_id - id of target ot get url for
 #			   user_id - id of an user, this is optional parameter and can
 #			   be ommited in some cercumstancess
+#              auxiliary parameters - hash reference for unnecessary parameters that can be used 
+#              in banners selection process. E.g. geobinding
 # Throws     : no exceptions
 # Comments   : ???
 # See Also   : n/a
  sub get_banner(){
- 	my ($self, $target_id, $user_id) = @_;
+ 	my ($self, $target_id, $user_id, $auxiliary_parameters) = @_;
  	
  	my $targets_collection = $self->database->get_collection( TARGET_COLLECTION_NAME );#obtain targets collection
  	my $target = $targets_collection->find_one({'_id' => MongoDB::OID->new('value' => $target_id)});
