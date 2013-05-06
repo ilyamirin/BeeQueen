@@ -42,7 +42,7 @@ sub build(){
 
 
 ############################################
-# Usage      : $query = $query_builder->clear_builder()
+# Usage      : $query_builder = $query_builder->clear_builder()
 # Purpose    : returns builder state to initial state.
 # Returns    : $self - this object.
 # Parameters : none
@@ -58,10 +58,10 @@ sub clear_builder(){
 }
 
 ############################################
-# Usage      : $query = $query_builder->set_target_banners($target->{'banners'})
+# Usage      : $query_builder = $query_builder->set_target_banners($target->{'banners'})
 # Purpose    : set target banners
 # Returns    : $self - this object.
-# Parameters : target banners oid array
+# Parameters : target banners oid array reference
 # Throws     : no exceptions
 # Comments   : ???
 # See Also   : n/a
