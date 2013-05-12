@@ -27,8 +27,8 @@ sub pick_banner(){
     my ($self, $banners_list) = @_;
     my $picked_banner = 0;
     if(defined $banners_list){
-        my $list_last_index = $#{$banners_list};
-        my $picked_index = int(rand($list_last_index));
+        my @banners_weights_list = $self->__get_banners_weights($banners_list);
+        my $picked_index = $self->__get_random_banner_id_by_weight(\@banners_weights_list);
         $picked_banner = ${$banners_list}[$picked_index];
     }
     
@@ -49,6 +49,8 @@ sub __get_random_banner_id_by_weight(){
 		}
 		$picked_banner_index++;
 	} 
+	
+	return $picked_banner_index;
 }
 
 ############################################
