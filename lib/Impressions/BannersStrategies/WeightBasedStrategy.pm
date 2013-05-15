@@ -65,7 +65,7 @@ sub __get_banners_weights(){
 	my @banner_weights = ();
 	my $prob_summ = 0;
 	for my $banner (@{$banners_list}){
-		my $weight = $banner->{'prob'};
+		my $weight = $banner->{'prob'} ? $banner->{'prob'} : 0;
 		$prob_summ += $weight;
 		push @banner_weights, $prob_summ;
 	}
