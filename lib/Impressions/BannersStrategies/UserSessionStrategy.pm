@@ -7,8 +7,8 @@ use Moo;
 
 with('Impressions::BannersStrategies::UserSessionStrategy');
 
-#strategy thet will pick a banner according to its weight
-has 'weight_based_strategy' => ('is' => 'ro');
+#strategy thet will pick a banner according to its weight or something else
+has 'banners_strategy' => ('is' => 'ro');
 #redis connection
 has 'redis' => ('is' => 'ro');
 =pod
@@ -31,9 +31,7 @@ sub pick_banner(){
     my ($self, $banners_list) = @_;
     my $picked_banner = 0;
     if(defined $banners_list){
-        my @banners_weights_list = $self->__get_banners_weights($banners_list);
-        my $picked_index = $self->__get_random_banner_id_by_weight(\@banners_weights_list);
-        $picked_banner = ${$banners_list}[$picked_index];
+        $picked_banner = $self->banners_strategy->pick($banners_list);
     }
     
     return $picked_banner;
