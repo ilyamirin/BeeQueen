@@ -25,14 +25,11 @@ This session stores ingormation about showed banners for user
 #              user_id - id of user to track session information
 # Throws     : no exceptions
 # Comments   : ???
-sub pick_banner(){
-    my ($self, $banners_list) = @_;
-    my $picked_banner = 0;
-    if(defined $banners_list){
-        $picked_banner = $self->banners_strategy->pick($banners_list);
-    }
+sub store_banner_display(){
+    my ($self, $user_id, $banner_id, $displays_number) = @_;
     
-    return $picked_banner;
+    my $status = 1;    
+    return $status;
 }
 
 
