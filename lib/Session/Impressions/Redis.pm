@@ -5,6 +5,8 @@ use warnings;
 
 use Moo;
 
+with('Impressions::BannersStrategies::StrategyRole');
+
 #redis connection
 has 'redis' => ('is' => 'ro');
 #expire time
@@ -32,5 +34,10 @@ sub store_banner_display(){
     return $status;
 }
 
+sub get_displayed_banners(){
+	my ($user_id) = @_;
+	
+	my @displayed_banners = ();
+}
 
 1;
