@@ -4,6 +4,8 @@ use strict;
 use warnings;
 
 use Moo;
+use Digest::MD5 qw(md5_hex);
+use JSON;
 
 with('Impressions::BannersStrategies::StrategyRole');
 
@@ -19,23 +21,38 @@ This session stores ingormation about showed banners for user
 
 
 ############################################
-# Usage      : $banner = $strategy->pick_banner(\@banners_list, $user_id)
-# Purpose    : pick a banner from list according to user session information
-#              and weight of that banner
+# Usage      : $status = $session->store_banner_display($user_id, $banner_id, 12);
+# Purpose    : Store information about banner views count
 # Returns    : banner hash reference
-# Parameters : banners list
-#              user_id - id of user to track session information
+# Parameters : user_id - id of user to track session information
+#              banner_id - identifyer of banner
+#              banner views - number of views for givent banner
 # Throws     : no exceptions
 # Comments   : ???
 sub store_banner_display(){
-    my ($self, $user_id, $banner_id, $displays_number) = @_;
+    my ($self, $user_id, $banner_id, $views_number) = @_;
+    
+    my $banner_views = {'id' => $banner_id, 'views' => $views_number};
+    my $banner_views_json = encode_json($banner_views);
+    my $key = $self->_get_user_key($user_id);
+    #store value with expire
+    $self->redis->multi();
+    $self->redis->sadd($key, $banner_views_json);
+    $self->redis->expire($key, $self->expire_time);
+    $self->redis->exec();
     
     my $status = 1;    
     return $status;
 }
 
+sub _get_user_key(){
+	my ($self, $user_id) = @_;
+	my $user_key = 'sess:impr:' . md5_hex($user_id) .'set';
+	return $user_key;
+}
+
 sub get_displayed_banners(){
-	my ($user_id) = @_;
+	my ($self, $user_id) = @_;
 	
 	my @displayed_banners = ();
 }
