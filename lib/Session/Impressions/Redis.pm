@@ -54,7 +54,12 @@ sub _get_user_key(){
 sub get_displayed_banners(){
 	my ($self, $user_id) = @_;
 	
+	my $key = $self->_get_user_key($user_id);
+	my @displayed_banners_json = $self->redis->smembers($key);
 	my @displayed_banners = ();
+	for my $banner_views_json (@displayed_banners_json){
+		my $banner_view = decode_json($banner_views_json);
+	}
 }
 
 1;
