@@ -51,15 +51,25 @@ sub _get_user_key(){
 	return $user_key;
 }
 
+############################################
+# Usage      : @banners_view = $session->get_displayed_banners($user_id);
+# Purpose    : Returns information about banners views for givent user
+# Returns    : banners views array [{'id' => banner_id, 'views' => 54}, ... ]
+# Parameters : user_id - id of user to track session information
+# Throws     : no exceptions
+# Comments   : ???
 sub get_displayed_banners(){
 	my ($self, $user_id) = @_;
 	
 	my $key = $self->_get_user_key($user_id);
 	my @displayed_banners_json = $self->redis->smembers($key);
-	my @displayed_banners = ();
+	my @banners_views = ();
 	for my $banner_views_json (@displayed_banners_json){
 		my $banner_view = decode_json($banner_views_json);
+		push @banners_views, $banner_view;
 	}
+	
+	return @banners_views;
 }
 
 1;
