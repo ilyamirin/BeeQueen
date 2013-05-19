@@ -1,4 +1,4 @@
-package Session::ImpressionsSession;
+package Session::Impressions::Redis;
 
 use strict;
 use warnings;
@@ -7,7 +7,7 @@ use Moo;
 use Digest::MD5 qw(md5_hex);
 use JSON;
 
-with('Impressions::BannersStrategies::StrategyRole');
+with('Session::Impressions::ImpressionSessionRole');
 
 #redis connection
 has 'redis' => ('is' => 'ro');

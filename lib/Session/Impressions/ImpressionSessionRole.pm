@@ -1,4 +1,4 @@
-package Session::ImpressionSessionRole;
+package Session::Impressions::ImpressionSessionRole;
 
 use Moo::Role;
 
