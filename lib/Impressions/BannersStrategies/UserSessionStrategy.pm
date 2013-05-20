@@ -5,12 +5,19 @@ use warnings;
 
 use Moo;
 
-with('Impressions::BannersStrategies::UserSessionStrategy');
+with('Impressions::BannersStrategies::StrategyRole');
 
 #strategy thet will pick a banner according to its weight or something else
 has 'banners_strategy' => ('is' => 'ro');
 #redis connection
-has 'redis' => ('is' => 'ro');
+has 'session' => (
+    'is' => 'ro',
+    'isa' => sub{
+    	if(! $_[0]->does('Session::Impressions::ImpressionSessionRole')){
+    		die "session is not implements Session::Impressions::ImpressionSessionRole";
+    	}
+    }
+);
 =pod
 =head1 Impressions::BannersStrategies::UserSessionStrategy
 The strategy based on an user session. I.e. a customer can choose to not to
