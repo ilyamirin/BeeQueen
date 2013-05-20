@@ -17,11 +17,11 @@ has 'expire_time' => ('is' => 'ro');
 =pod
 =head1 Session::ImpressionsSession
 This session stores ingormation about showed banners for user
-=cut
+=cut 
 
 
 ############################################
-# Usage      : $status = $session->store_banner_display($user_id, $banner_id, 12);
+# Usage      : $status = $session->incr_banner_display($user_id, $banner_id, 12);
 # Purpose    : Store information about banner views count
 # Returns    : banner hash reference
 # Parameters : user_id - id of user to track session information
@@ -29,15 +29,13 @@ This session stores ingormation about showed banners for user
 #              banner views - number of views for givent banner
 # Throws     : no exceptions
 # Comments   : ???
-sub store_banner_display(){
-    my ($self, $user_id, $banner_id, $views_number) = @_;
-    
-    my $banner_views = {'id' => $banner_id, 'views' => $views_number};
-    my $banner_views_json = encode_json($banner_views);
+sub incr_banner_display(){
+    my ($self, $user_id, $banner_id, $count_of_views) = @_;
+    $count_of_views = $count_of_views ? $count_of_views : 1;
     my $key = $self->_get_user_key($user_id);
     #store value with expire
     $self->redis->multi();
-    $self->redis->sadd($key, $banner_views_json);
+    $self->redis->hincrby($key, $banner_id, $count_of_views);
     $self->redis->expire($key, $self->expire_time);
     $self->redis->exec();
     
@@ -62,14 +60,8 @@ sub get_displayed_banners(){
 	my ($self, $user_id) = @_;
 	
 	my $key = $self->_get_user_key($user_id);
-	my @displayed_banners_json = $self->redis->smembers($key);
-	my @banners_views = ();
-	for my $banner_views_json (@displayed_banners_json){
-		my $banner_view = decode_json($banner_views_json);
-		push @banners_views, $banner_view;
-	}
-	
-	return @banners_views;
+	my %displayed_banners = $self->redis->hgetall($key);
+	return %displayed_banners;
 }
 
 1;
