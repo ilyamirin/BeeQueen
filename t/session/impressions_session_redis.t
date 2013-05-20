@@ -5,8 +5,7 @@ use strict;
 use Redis;
 use Session::Impressions::Redis;
 
-
-my $redis = Redis->new( server => 'localhost:6379', encoding => undef );
+my $redis = Redis::Client->new( host => 'localhost', port => 6379 );
 
 my $session = Session::Impressions::Redis->new({
 	'redis' => $redis,
