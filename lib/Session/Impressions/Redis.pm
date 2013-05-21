@@ -50,9 +50,9 @@ sub _get_user_key(){
 }
 
 ############################################
-# Usage      : @banners_view = $session->get_displayed_banners($user_id);
+# Usage      : %banners_view = $session->get_displayed_banners($user_id);
 # Purpose    : Returns information about banners views for givent user
-# Returns    : banners views array [{'id' => banner_id, 'views' => 54}, ... ]
+# Returns    : banners views hash (banner_id => views, ...)
 # Parameters : user_id - id of user to track session information
 # Throws     : no exceptions
 # Comments   : ???
