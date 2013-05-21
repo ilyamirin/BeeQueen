@@ -44,10 +44,14 @@ show the same banner for one person more than N times, and so on.
 # Comments   : ???
 sub pick_banner(){
     my ($self, $banners_list, $user_id) = @_;
+    
+    my @reduced_banners_list = $self->__reduce_banners_from_list($banners_list, $user_id);
     my $picked_banner = 0;
     if(defined $banners_list){
-        $picked_banner = $self->banners_strategy->pick($banners_list);
+        $picked_banner = $self->banners_strategy->pick(\@reduced_banners_list);
     }
+    
+    $self->session->incr_banner_display($user_id, $picked_banner->{'_id'}->to_string(), 1);
     
     return $picked_banner;
 }
