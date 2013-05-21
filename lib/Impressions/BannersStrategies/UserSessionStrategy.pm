@@ -52,13 +52,28 @@ sub pick_banner(){
     return $picked_banner;
 }
 
+############################################
+# Usage      : $banner = $self->__reduce_banners_from_list(\@banners_list, $user_id);
+# Purpose    : reduce banners list with banners that were already shown too many times
+# Returns    : reduced banners list
+# Parameters : banners list array reference
+#              user_id - id of user to track session information
+# Throws     : no exceptions
+# Comments   : ???
 sub __reduce_banners_from_list(){
 	my ($self, $banners_list, $user_id) = @_;
-	my $shown_banners_views = $self->session->get_displayed_banners($user_id);
+	my %shown_banners_views = $self->session->get_displayed_banners($user_id);
+	my @banners_accepted_to_show = ();
 	for my $banner (@{$banners_list}){
 		my $banner_max_views = $banner->{'max_views'} ? $banner->{'max_views'} : $self->default_max_views;
-		
+		my $banner_id = $banner->{'_id'}->to_string();
+		if(!(exists $shown_banners_views{$banner_id}
+		   && $shown_banners_views{$banner_id} > $banner_max_views)){
+			push @banners_accepted_to_show, $banner;
+		}
 	} 
+	
+	return @banners_accepted_to_show;
 }
 
 1;
