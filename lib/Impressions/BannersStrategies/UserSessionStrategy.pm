@@ -50,8 +50,9 @@ sub pick_banner(){
     if(defined $banners_list){
         $picked_banner = $self->banners_strategy->pick_banner(\@reduced_banners_list);
     }
-    
-    $self->session->incr_banner_display($user_id, $picked_banner->{'_id'}->to_string(), 1);
+    if($picked_banner){
+        $self->session->incr_banner_display($user_id, $picked_banner->{'_id'}->to_string(), 1);
+    }
     
     return $picked_banner;
 }
