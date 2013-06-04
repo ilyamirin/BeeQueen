@@ -1,4 +1,4 @@
-use Test::Simple tests=> 1;
+use Test::Simple tests=> 2;
 use warnings;
 use strict;
 use Test::MockObject;
