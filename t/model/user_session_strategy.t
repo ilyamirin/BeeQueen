@@ -18,7 +18,7 @@ $session->set_true('does');
 $session->mock('get_displayed_banners', sub{
 	return ('banner_1' => 4);
 });
-
+$session->set_true('incr_banner_display');
 my $user_session_based_strategy = Impressions::BannersStrategies::UserSessionStrategy->new({
 	'banners_strategy' => $pick_second_strategy,
 	'session' => $session,

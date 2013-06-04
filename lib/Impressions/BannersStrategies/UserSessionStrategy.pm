@@ -72,7 +72,7 @@ sub __reduce_banners_from_list(){
 		my $banner_max_views = $banner->{'max_views'} ? $banner->{'max_views'} : $self->default_max_views;
 		my $banner_id = $banner->{'_id'}->to_string();
 		if(!(exists $shown_banners_views{$banner_id}
-		   && $shown_banners_views{$banner_id} > $banner_max_views)){
+		   && $shown_banners_views{$banner_id} >= $banner_max_views)){
 			push @banners_accepted_to_show, $banner;
 		}
 	} 
