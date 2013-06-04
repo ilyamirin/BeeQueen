@@ -23,6 +23,8 @@ my %args = (
     $harness_working_directory . '/model/clicks_service.t',
     $harness_working_directory . '/model/events_service.t',
     $harness_working_directory . '/model/weight_based_strategy.t',
+    $harness_working_directory . '/model/user_session_strategy.t',
+    $harness_working_directory . '/session/impressions_session_redis.t',
     $harness_working_directory . '/web/rest_test.t'
  );
  $harness->runtests(@tests);

@@ -20,7 +20,9 @@ use constant TARTGET_BUNDLE_COLLECTION_NAME => 'target_bundles';
  #database handler
  has 'database' => (is => 'ro',);
  #banners_strategies hash reference {'banner_strategy_name' => $banners_strategy}
- has 'banners_strategies' => (is => 'ro');
+ has 'banners_strategies' => (
+    'is' => 'ro',
+ );
  #service to register impression statistics
  has 'impression_registrar' => (is => 'ro');
  #query builder
