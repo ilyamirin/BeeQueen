@@ -8,6 +8,18 @@ test_database:
         -  {ref: 'mongo'}
         -  'development'
         
+redis_connection:
+    class: 'Redis'
+    args:
+        server: 'localhost:6379'
+        encoding: 'undef'
+        reconnect: 60
+sessions_impressions_redis:
+    class: 'Session::Impressions::Redis'
+    args:
+        redis: redis_connection
+        expire_time: 2
+              
 impression_registrar:
     class: 'Impressions::ImpressionStatistics'
     args:
@@ -15,7 +27,14 @@ impression_registrar:
 random_strategy: 
     class: 'Impressions::BannersStrategies::RandomStrategy'  
 weights_bassed_strategy:
-    class: 'Impressions::BannersStrategies::WeightBasedStrategy'   
+    class: 'Impressions::BannersStrategies::WeightBasedStrategy'
+user_session_strategy:
+    class: 'Impressions::BannersStrategies::UserSessionStrategy'
+    args:
+        banners_strategy: {ref: 'weight_bassed_strategy'}
+        session: {ref: 'sessions_impressions_redis'}
+        default_max_views: 5
+           
 banners_query_builder:
     class: 'Impressions::BannersQueryBuilder'               
 impression_service:
@@ -25,7 +44,8 @@ impression_service:
         banners_strategies : 
             {
                 random:  {ref : 'random_strategy'}
-                weight_based: {ref: 'weights_bassed_strategy'}
+                weight_based: {ref: 'weights_bassed_strategy'}              
+                user_session: {ref: 'user_session_strategy'}
             }
         impression_registrar: {ref: 'impression_registrar'}
         banners_query_builder: {ref: 'banners_query_builder'}
