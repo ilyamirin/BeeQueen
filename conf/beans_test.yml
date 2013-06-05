@@ -7,6 +7,17 @@ test_database:
     args: 
         -  {ref: 'mongo'}
         -  'test'
+redis_connection:
+    class: 'Redis'
+    args:
+        server: 'localhost:6379'
+        encoding: 'undef'
+        reconnect: 60
+sessions_impressions_redis:
+    class: 'Session::Impressions::Redis'
+    args:
+        redis: redis_connection
+        expire_time: 2
         
 impression_registrar:
     class: 'Impressions::ImpressionStatistics'
