@@ -66,6 +66,8 @@ Initialyse application
 	      my $clicks_service = $self->get_bean('clicks_service');
 	      my $redirect_url = $clicks_service->process_click($target_id, $banner_id, $user_id);
 	      $self->redirect_to($redirect_url); 
+      }else{
+      	$self->render(text => 'No banner id');
       }    
     });	
      
