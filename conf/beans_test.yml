@@ -35,17 +35,13 @@ user_session_strategy:
         default_max_views: 5
         
 banners_query_builder:
-    class: 'Impressions::BannersQueryBuilder'                    
+    class: 'Impressions::BannersQueryBuilder'    
+                    
 impression_service:
     class: 'Impressions::Impression'
     args:
         database: {ref: 'test_database'}
-        banners_strategies : 
-            {
-                random:  {ref : 'random_strategy'}
-                weight_based: {ref: 'weight_bassed_strategy'}
-                user_session: {ref: 'user_session_strategy'}
-            }
+        banners_strategies : {random:  {ref : 'random_strategy'}, weight_based: {ref: 'weights_bassed_strategy'}, user_session: {ref: 'user_session_strategy'} }
         impression_registrar: {ref: 'impression_registrar'}
         banners_query_builder: {ref: 'banners_query_builder'}
 clicks_service:
