@@ -31,7 +31,7 @@ weights_bassed_strategy:
 user_session_strategy:
     class: 'Impressions::BannersStrategies::UserSessionStrategy'
     args:
-        banners_strategy: {ref: 'weight_bassed_strategy'}
+        banners_strategy: {ref: 'weights_bassed_strategy'}
         session: {ref: 'sessions_impressions_redis'}
         default_max_views: 5
            

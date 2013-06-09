@@ -25,7 +25,7 @@ impression_registrar:
         database: {ref: 'test_database'}
 random_strategy: 
     class: 'Impressions::BannersStrategies::RandomStrategy'
-weight_bassed_strategy:
+weights_bassed_strategy:
     class: 'Impressions::BannersStrategies::WeightBasedStrategy'
 user_session_strategy:
     class: 'Impressions::BannersStrategies::UserSessionStrategy'
