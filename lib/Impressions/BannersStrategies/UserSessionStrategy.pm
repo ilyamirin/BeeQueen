@@ -17,7 +17,7 @@ has 'session' => (
     'is' => 'ro',
     'isa' => sub{
     	if(! $_[0]->does('Session::Impressions::ImpressionSessionRole')){
-    		die "session is not implements Session::Impressions::ImpressionSessionRole";
+    		die "session does not implements Session::Impressions::ImpressionSessionRole";
     	}
     },
     'required' => 1,
