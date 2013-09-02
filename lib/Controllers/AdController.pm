@@ -65,12 +65,9 @@ sub event() {
           my $banner_id = $request->param('banner_id') || '';
           my $user_id = $request->param('user_id') || '';
           
-          my $events_service = $self->get_bean('events_service');
-          my $status = $events_service->register_event($event_id, $banner_id, $user_id);
+          my $status = $self->events_service->register_event($event_id, $banner_id, $user_id);
           my $status_lit = $status ? 'ok' : 'error'; 
-          $self->render(json => {
-            'status' => $status_lit,            
-          });       
+          return encode_json({'status' => $status_lit,});       
       }    
  }
 
