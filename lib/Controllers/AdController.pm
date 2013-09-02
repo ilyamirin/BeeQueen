@@ -43,7 +43,7 @@ sub click(){
           
           my $clicks_service = $self->get_bean('clicks_service');
           my $redirect_url = $clicks_service->process_click($target_id, $banner_id, $user_id);
-          return $request->redirect_to($redirect_url); 
+          return $request->new_response->redirect( $redirect_url ); 
       }else{
         return encode_json({'text' => 'No banner id'});
       }    
