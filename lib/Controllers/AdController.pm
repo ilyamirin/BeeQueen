@@ -33,7 +33,7 @@ sub impression_bundle(){
       return encode_json(\%bundle_data);       
 }
      
-     $r->any('/click' => sub {
+sub click(){
       my $self = shift;
       
       my $banner_id = $self->param('banner_id');
@@ -47,9 +47,9 @@ sub impression_bundle(){
       }else{
         $self->render(text => 'No banner id');
       }    
-    }); 
+} 
      
-     $r->any('/event' => sub {
+sub event() {
       my $self = shift;
       
       my $event_id = $self->param('event_id');
@@ -64,5 +64,6 @@ sub impression_bundle(){
             'status' => $status_lit,            
           });       
       }    
-    }); 
+ }
 
+1;
