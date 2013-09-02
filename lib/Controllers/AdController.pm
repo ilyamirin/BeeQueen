@@ -34,23 +34,23 @@ sub impression_bundle(){
 }
      
 sub click(){
-      my $self = shift;
+      my ($self, $request) = @_;
       
-      my $banner_id = $self->param('banner_id');
+      my $banner_id = $request->param('banner_id');
       if($banner_id){
-          my $target_id = $self->param('target_id') || '';
-          my $user_id = $self->param('user_id') || '';
+          my $target_id = $request->param('target_id') || '';
+          my $user_id = $request->param('user_id') || '';
           
           my $clicks_service = $self->get_bean('clicks_service');
           my $redirect_url = $clicks_service->process_click($target_id, $banner_id, $user_id);
-          $self->redirect_to($redirect_url); 
+          return $request->redirect_to($redirect_url); 
       }else{
-        $self->render(text => 'No banner id');
+        return encode_json({'text' => 'No banner id'});
       }    
 } 
      
 sub event() {
-      my $self = shift;
+      my ($self, $request) = @_;
       
       my $event_id = $self->param('event_id');
       if($event_id){
