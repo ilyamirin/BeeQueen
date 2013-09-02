@@ -8,6 +8,15 @@ has impression_service => (
     
 );
 
+has clicks_service =>(
+    'is' => 'ro',
+    'isa' => 'Clicks::ClicksService',
+);
+
+has events_service => (
+    'is' => 'ro',
+    'isa' => 'Events::EventsService',
+);
 
 
 sub impression() {
@@ -41,8 +50,7 @@ sub click(){
           my $target_id = $request->param('target_id') || '';
           my $user_id = $request->param('user_id') || '';
           
-          my $clicks_service = $self->get_bean('clicks_service');
-          my $redirect_url = $clicks_service->process_click($target_id, $banner_id, $user_id);
+          my $redirect_url = $self->clicks_service->process_click($target_id, $banner_id, $user_id);
           return $request->new_response->redirect( $redirect_url ); 
       }else{
         return encode_json({'text' => 'No banner id'});
@@ -52,10 +60,10 @@ sub click(){
 sub event() {
       my ($self, $request) = @_;
       
-      my $event_id = $self->param('event_id');
+      my $event_id = $request->param('event_id');
       if($event_id){
-          my $banner_id = $self->param('banner_id') || '';
-          my $user_id = $self->param('user_id') || '';
+          my $banner_id = $request->param('banner_id') || '';
+          my $user_id = $request->param('user_id') || '';
           
           my $events_service = $self->get_bean('events_service');
           my $status = $events_service->register_event($event_id, $banner_id, $user_id);
