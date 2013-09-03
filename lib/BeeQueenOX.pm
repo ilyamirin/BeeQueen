@@ -1,7 +1,7 @@
 package BeeQueenOX;
 
 use OX;
-
+with('DependencyInjection::DependencyInjectionRole');
 
 
 
