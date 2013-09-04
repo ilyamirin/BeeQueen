@@ -1,7 +1,7 @@
 package DependencyInjection::DependencyInjectionRole;
 
 use Bread::Board::Declare;
-use Moose::Role;
+use OX::Role;
 
 
 has mongo =>(
@@ -12,7 +12,6 @@ has mongo =>(
 has mongo_database_name => (
     is       => 'ro',
     isa      => 'Str',
-    required => 1,
     value => 'development'
 );
 
