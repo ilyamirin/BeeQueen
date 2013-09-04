@@ -87,11 +87,11 @@ has impression_service => (
     isa => 'Impressions::Impression',
     dependencies => {
         database => 'test_database',
-        banners_strategies => {
+        banners_strategies => dep(value => {
         	random => 'random_strategy', 
         	weight_based => 'weights_bassed_strategy',
         	user_session => 'user_session_strategy' 
-        },
+        }),
         impression_registrar => 'impression_registrar',
         banners_query_builder => 'banners_query_builder',
     }
