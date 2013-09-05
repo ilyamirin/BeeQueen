@@ -3,6 +3,8 @@ package DependencyInjection::DependencyInjectionRole;
 use Bread::Board::Declare;
 use OX::Role;
 
+use Misc::MongoDatabase;
+use Impressions::Impression;
 
 has mongo =>(
     is => 'ro',
@@ -71,7 +73,7 @@ has user_session_strategy => (
     isa =>  'Impressions::BannersStrategies::UserSessionStrategy',
     dependencies => {
         banners_strategy => 'weights_bassed_strategy',
-        session => 'sessions_impressions_redis',
+        session => 'session_impression_redis',
         default_max_views => dep(value => 5),
     }
 );
@@ -83,17 +85,38 @@ has banners_query_builder => (
 
 has impression_service => (
     is => 'ro',
-    isa => 'Impressions::Impression',
+#    isa => 'Impressions::Impression',
+    block => sub{
+    	my $s = shift;
+    	Impressions::Impression->new(
+	    	database => $s->param('database'),
+	        banners_strategies =>  {
+	            random => $s->param( 'random'), 
+	            weight_based => $s->param('weights_bassed'),
+	            user_session => $s->param('user_session'), 
+	        },
+	        impression_registrar => $s->param('impression_registrar'),
+	        banners_query_builder => $s->param('banners_query_builder'),
+    	);
+    },
     dependencies => {
         database => 'test_database',
-        banners_strategies => dep(value => {
-        	random => 'random_strategy', 
-        	weight_based => 'weights_bassed_strategy',
-        	user_session => 'user_session_strategy' 
-        }),
+        random => 'random_strategy', 
+        weight_based => 'weights_bassed_strategy',
+        user_session => 'user_session_strategy',
         impression_registrar => 'impression_registrar',
         banners_query_builder => 'banners_query_builder',
     }
+#    dependencies => {
+#        database => 'test_database',
+#        banners_strategies => dep(value => {
+#        	random => 'random_strategy', 
+#        	weight_based => 'weights_bassed_strategy',
+#        	user_session => 'user_session_strategy' 
+#        }),
+#        impression_registrar => 'impression_registrar',
+#        banners_query_builder => 'banners_query_builder',
+#    }
 );
 has clicks_service => (
     is => 'ro',
