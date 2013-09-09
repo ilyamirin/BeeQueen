@@ -10,7 +10,8 @@ has controller => (
 		impression_service => 'impression_service',
 		clicks_service     => 'clicks_service',
 		events_service     => 'events_service',
-	}
+	},
+	 lifecycle => 'Singleton',
 );
 
 router as {
