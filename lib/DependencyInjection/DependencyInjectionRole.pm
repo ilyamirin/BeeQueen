@@ -8,13 +8,15 @@ use Impressions::Impression;
 
 has mongo =>(
     is => 'ro',
-    isa => 'MongoDB::MongoClient'
+    isa => 'MongoDB::MongoClient',
+    lifecycle => 'Singleton',
 );
 
 has mongo_database_name => (
     is       => 'ro',
     isa      => 'Str',
-    value => 'development'
+    value => 'development',
+    lifecycle => 'Singleton',
 );
 
 has test_database => (
@@ -30,7 +32,9 @@ has test_database => (
     dependencies => {
     	'mongo' => 'mongo',
     	'database_name' => 'mongo_database_name'
-    }
+    },
+    lifecycle => 'Singleton',
+    
 );
 
 has redis_connection =>(
@@ -40,7 +44,8 @@ has redis_connection =>(
     	server => dep(value => 'localhost:6379'),
     	#encoding => dep(value => undef),
     	reconnect => dep(value => 60),
-    }
+    },
+    lifecycle => 'Singleton',
 );        
 
 has session_impression_redis => (
@@ -49,7 +54,8 @@ has session_impression_redis => (
     dependencies => {
     	redis => 'redis_connection',
         expire_time => dep(value => 2)
-    }
+    },
+    lifecycle => 'Singleton',
 );
 
 
@@ -58,15 +64,18 @@ has impression_registrar => (
     isa => 'Impressions::ImpressionStatistics',
     dependencies =>{
         database => 'test_database'        	
-    }
+    },
+    lifecycle => 'Singleton',
 );
 has random_strategy =>( 
     is => 'ro',
     isa => 'Impressions::BannersStrategies::RandomStrategy',
+    lifecycle => 'Singleton',
 );  
 has weights_bassed_strategy => (
     is => 'ro',
-    isa => 'Impressions::BannersStrategies::WeightBasedStrategy'
+    isa => 'Impressions::BannersStrategies::WeightBasedStrategy',
+    lifecycle => 'Singleton',
 );
 has user_session_strategy => (
     is => 'ro',
@@ -75,12 +84,14 @@ has user_session_strategy => (
         banners_strategy => 'weights_bassed_strategy',
         session => 'session_impression_redis',
         default_max_views => dep(value => 5),
-    }
+    },
+    lifecycle => 'Singleton',
 );
 
 has banners_query_builder => (
     is => 'ro',
-    isa => 'Impressions::BannersQueryBuilder'
+    isa => 'Impressions::BannersQueryBuilder',
+    lifecycle => 'Singleton',
 );               
 
 has impression_service => (
@@ -106,7 +117,8 @@ has impression_service => (
         user_session => 'user_session_strategy',
         impression_registrar => 'impression_registrar',
         banners_query_builder => 'banners_query_builder',
-    }
+    },
+    lifecycle => 'Singleton',
 #    dependencies => {
 #        database => 'test_database',
 #        banners_strategies => dep(value => {
@@ -123,14 +135,16 @@ has clicks_service => (
     isa => 'Clicks::ClicksService',
     dependencies => {
         database => 'test_database'    	
-    }
+    },
+    lifecycle => 'Singleton',
 );
 has events_service =>( 
     is => 'ro',
     isa => 'Events::EventsService',
     dependencies => {
         database => 'test_database'
-    }
+    },
+    lifecycle => 'Singleton',
 );
 1;
 
