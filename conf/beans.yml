@@ -3,9 +3,9 @@ mongo:
             
 test_database:
     class: 'Misc::MongoDatabase'
-    method: 'get_database'
+    method: get_database
     args: 
-        -  {ref: 'mongo'}
+        -  {$ref: 'mongo'}
         -  'development'
         
 redis_connection:
@@ -23,7 +23,7 @@ sessions_impressions_redis:
 impression_registrar:
     class: 'Impressions::ImpressionStatistics'
     args:
-        database: {ref: 'test_database'}
+        database: {$ref: 'test_database'}
 random_strategy: 
     class: 'Impressions::BannersStrategies::RandomStrategy'  
 weights_bassed_strategy:
@@ -31,8 +31,8 @@ weights_bassed_strategy:
 user_session_strategy:
     class: 'Impressions::BannersStrategies::UserSessionStrategy'
     args:
-        banners_strategy: {ref: 'weights_bassed_strategy'}
-        session: {ref: 'sessions_impressions_redis'}
+        banners_strategy: {$ref: 'weights_bassed_strategy'}
+        session: {$ref: 'sessions_impressions_redis'}
         default_max_views: 5
            
 banners_query_builder:
@@ -40,16 +40,16 @@ banners_query_builder:
 impression_service:
     class: 'Impressions::Impression'
     args:
-        database: {ref: 'test_database'}
-        banners_strategies : {random:  {ref : 'random_strategy'}, weight_based: {ref: 'weights_bassed_strategy'}, user_session: {ref: 'user_session_strategy'} }
-        impression_registrar: {ref: 'impression_registrar'}
-        banners_query_builder: {ref: 'banners_query_builder'}
+        database: {$ref: 'test_database'}
+        banners_strategies : {random:  {$ref : 'random_strategy'}, weight_based: {$ref: 'weights_bassed_strategy'}, user_session: {$ref: 'user_session_strategy'} }
+        impression_registrar: {$ref: 'impression_registrar'}
+        banners_query_builder: {$ref: 'banners_query_builder'}
 clicks_service:
     class: 'Clicks::ClicksService'
     args:
-        database: {ref: 'test_database'}
+        database: {$ref: 'test_database'}
 events_service:
     class: 'Events::EventsService'
     args:
-        database: {ref: 'test_database'}
+        database: {$ref: 'test_database'}
 
